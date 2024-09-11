@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %} Products {% endblock %}
+
+{% block content %}
+        <h1>{{ restaurant.name }}</h1>
+    <div style="display: flex; justify-content: space-between">
+        <div style="width: 30%; padding: 10px; border-right: 1px solid #ccc;">
+            <h3>Products:</h3>
+            <br>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="text-align: left">Product</th>
+                        <th style="text-align: left">Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td> {{ product.name }} </td>
+                        <td><form method="post" action=" {% url 'order-detail' restaurant.pk %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_id" value="{{product.id}}">
+
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" name="action" value="add" style="display: inline">+</button>
+
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" name="action" value="subtract" style="display: inline">-</button>
+                            </form>
+                        </td>
+                        <td></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div style="width: 65%; padding: 10px;">
+            <i>{{message}}</i> <br>
+            {% for item in order_items %}
+                {{ item.product.name }}
+                {{ item.quantity }}
+                <br>
+            {% endfor%}
+        </div>
+    </div>
+    <br>
+
+{% endblock %}
+    </div>

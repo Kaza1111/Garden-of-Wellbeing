@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{%block title%} Title {%endblock%}</title>
+</head>
+<body>
+    Navagation:
+    <ul>
+        <li><a href="{% url 'products' %}"> Product list </a></li>
+        <li><a href="{% url 'restaurant-list' %}">Restaurant list</a></li>
+        <li><a href="">Seeds plan</a></li>
+        <li><a href="">Anything else</a></li>
+    </ul>
+    <br>
+    {% block content %}
+    {% endblock %}
+</body>
+<br>
+<footer>
+    Zahrádka blahobytu 2024
+</footer>
+</html>

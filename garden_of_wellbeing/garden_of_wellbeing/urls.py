@@ -17,6 +17,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from garden_app.views import ProductsListView, AddProductView, EditProductView, DeleteProductView, RestaurantListView, \
+                    AddRestaurantView, EditRestaurantView, DeleteRestaurantView, OrderView
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('products/', ProductsListView.as_view(), name='products'),
+    path('add_product/', AddProductView.as_view(), name='add-product'),
+    path('edit_product/<int:product_pk>/', EditProductView.as_view(), name='edit-product'),
+    path('delete_product/<int:product_pk>/', DeleteProductView.as_view(), name='delete-product'),
+    path('restaurant_list/', RestaurantListView.as_view(), name='restaurant-list'),
+    path('add_restaurant/', AddRestaurantView.as_view(), name='add-restaurant'),
+    path('edit_restaurant/<int:restaurant_pk>', EditRestaurantView.as_view(), name='edit-restaurant'),
+    path('delete_restaurant/<int:restaurant_pk>', DeleteRestaurantView.as_view(), name='delete-restaurant'),
+    path('order_detail/<int:restaurant_pk>', OrderView.as_view(), name='order-detail')
+
 ]

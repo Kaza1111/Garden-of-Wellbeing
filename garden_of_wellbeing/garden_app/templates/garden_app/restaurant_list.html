@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %} Restaurants {% endblock %}
+
+{% block content %}
+    <div style="text-align: center;">
+    <h2>Restaurants:</h2>
+    {{message}}
+    <br>
+    <table border="1" cellpadding="10" cellspacing="0" style="margin: 0 auto;">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>City</th>
+                <th>Distance</th>
+                <th>Region</th>
+                <th>Driver</th>
+                <th>E-mail</th>
+                <th>Sales per week</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for restaurant in restaurants %}
+            <tr>
+                <td><strong>{{ restaurant.name }} </strong></td>
+                <td>{{ restaurant.city }}</td>
+                <td>{{ restaurant.distance}}</td>
+                <td>{{ restaurant.region }}</td>
+                <td>{{ restaurant.region.driver}}</td>
+                <td>{{ restaurant.email }}</td>
+                <td></td>
+                <td><form method="get" action="{% url 'edit-restaurant' restaurant.pk %}" style="display: inline">
+                        <button type="submit">Edit</button>
+                    </form>
+                    <form method="get" action="{% url 'delete-restaurant' restaurant.pk %}" style="display: inline">
+                        <button type="submit">Delete</button>
+                    </form>
+                    <form method="get" action="{% url 'order-detail' restaurant.pk %}" style="display: inline">
+                        <button type="submit">Order detail</button>
+                    </form>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <form method="get" action="{% url 'add-restaurant' %}">
+        <button type="submit">Add New Restaurant</button>
+    </form>
+
+{% endblock %}
+    </div>

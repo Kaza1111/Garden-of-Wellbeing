@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %} Products {% endblock %}
+
+{% block content %}
+    <div style="text-align: center;">
+    <h2>Products:</h2>
+    <table border="1" cellpadding="10" cellspacing="0" style="margin: 0 auto;">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Days of Growth</th>
+                <th>Seeds Amount</th>
+                <th>Cost Price</th>
+                <th>Sale Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.days_of_growth }}</td>
+                <td>{{ product.seeds_amount }}</td>
+                <td>{{ product.cost_price }}</td>
+                <td>{{ product.sale_price }}</td>
+                <td>
+                    <form method="get" action="{% url 'edit-product' product.pk %}" style="display:inline;">
+                        <button type="submit">Edit</button>
+                    </form>
+                    <form method="get" action="{% url 'delete-product' product.pk %}" style="display:inline;">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <form method="get" action="{% url 'add-product' %}">
+        <button type="submit">Add New Product</button>
+    </form>
+{% endblock %}
+    </div>
