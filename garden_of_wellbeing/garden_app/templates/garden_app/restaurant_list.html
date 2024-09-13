@@ -5,6 +5,7 @@
 {% block content %}
     <div style="text-align: center;">
     <h2>Restaurants:</h2>
+        <h4>Total sales: {{ total_together }}</h4>
     {{message}}
     <br>
     <table border="1" cellpadding="10" cellspacing="0" style="margin: 0 auto;">
@@ -21,22 +22,22 @@
             </tr>
         </thead>
         <tbody>
-            {% for restaurant in restaurants %}
+            {% for restaurant_data in restaurants_data %}
             <tr>
-                <td><strong>{{ restaurant.name }} </strong></td>
-                <td>{{ restaurant.city }}</td>
-                <td>{{ restaurant.distance}}</td>
-                <td>{{ restaurant.region }}</td>
-                <td>{{ restaurant.region.driver}}</td>
-                <td>{{ restaurant.email }}</td>
-                <td></td>
-                <td><form method="get" action="{% url 'edit-restaurant' restaurant.pk %}" style="display: inline">
+                <td><strong>{{ restaurant_data.restaurant.name }} </strong></td>
+                <td>{{ restaurant_data.restaurant.city }}</td>
+                <td>{{ restaurant_data.restaurant.distance}}</td>
+                <td>{{ restaurant_data.restaurant.region }}</td>
+                <td>{{ restaurant_data.restaurant.region.driver}}</td>
+                <td>{{ restaurant_data.restaurant.email }}</td>
+                <td>{{ restaurant_data.total }}</td>
+                <td><form method="get" action="{% url 'edit-restaurant' restaurant_data.restaurant.pk %}" style="display: inline">
                         <button type="submit">Edit</button>
                     </form>
-                    <form method="get" action="{% url 'delete-restaurant' restaurant.pk %}" style="display: inline">
+                    <form method="get" action="{% url 'delete-restaurant' restaurant_data.restaurant.pk %}" style="display: inline">
                         <button type="submit">Delete</button>
                     </form>
-                    <form method="get" action="{% url 'order-detail' restaurant.pk %}" style="display: inline">
+                    <form method="get" action="{% url 'order-detail' restaurant_data.restaurant.pk %}" style="display: inline">
                         <button type="submit">Order detail</button>
                     </form>
                 </td>

@@ -3,49 +3,80 @@
 {% block title %} Products {% endblock %}
 
 {% block content %}
-        <h1>{{ restaurant.name }}</h1>
+<h1>{{ restaurant.name }}</h1>
     <div style="display: flex; justify-content: space-between">
-        <div style="width: 30%; padding: 10px; border-right: 1px solid #ccc;">
-            <h3>Products:</h3>
-            <br>
-            <table>
-                <thead>
-                    <tr>
-                        <th style="text-align: left">Product</th>
-                        <th style="text-align: left">Quantity</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for product in products %}
-                    <tr>
-                        <td> {{ product.name }} </td>
-                        <td><form method="post" action=" {% url 'order-detail' restaurant.pk %}">
-                                {% csrf_token %}
-                                <input type="hidden" name="product_id" value="{{product.id}}">
-
-                                <input type="hidden" name="quantity" value="1">
-                                <button type="submit" name="action" value="add" style="display: inline">+</button>
-
-                                <input type="hidden" name="quantity" value="1">
-                                <button type="submit" name="action" value="subtract" style="display: inline">-</button>
-                            </form>
-                        </td>
-                        <td></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <div style="width: 65%; padding: 10px;">
-            <i>{{message}}</i> <br>
-            {% for item in order_items %}
-                {{ item.product.name }}
-                {{ item.quantity }}
+        <div style="width: 40%; padding: 10px; border-right: 1px solid #ccc; display: flex; justify-content: space-between">
+            <div style="width: 45%; padding-right: 5px">
+                <h3>Products:</h3>
                 <br>
-            {% endfor%}
+                <table>
+                    <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td> {{ product.name }} </td>
+                            <td><form method="post" action=" {% url 'order-detail' restaurant.pk %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="product_id" value="{{product.id}}">
+
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" name="action" value="add" style="display: inline">+</button>
+
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" name="action" value="subtract" style="display: inline">-</button>
+                                </form>
+                            </td>
+                            <td></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div style="width: 45%; padding-top: 80px; padding-right: 25px">
+                <form>
+                    {% csrf_token %}
+                    <label for="description">Note:</label>
+                    <textarea id="description" name="description" rows="7" cols="30"></textarea>
+                    <button type="submit">Save</button>
+                </form>
+            </div>
         </div>
+        <div style="width: 60%; padding: 10px; border-right: 1px solid #ccc; display: flex; justify-content: space-between">
+            <div style="width: 60%; padding-right: 5px">
+                <h3>Actual order:</h3>
+                <i>Last update: {{current_order.date}}</i>
+                <i>{{message}}</i> <br>
+                <table style="width: 70%; border-collapse: collapse; border: 1px solid #ddd;">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left">Product Name</th>
+                            <th style="text-align: left">Quantity</th>
+                            <th style="text-align: left">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order_items %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.subtotal }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <br>
+                Total: {{ total }}
+                <br>
+                <br>
+                <br>
+                <form method="get" action="{% url 'restaurant-list' %}">
+                    <button type="submit">Restaurant list</button>
+                </form>
+            </div>
+            <div style="width: 25%">
+                {{current.order.description}}
+            </div>
+        </div>
+
     </div>
-    <br>
 
 {% endblock %}
-    </div>

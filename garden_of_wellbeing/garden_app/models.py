@@ -1,6 +1,10 @@
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+from django.utils import timezone
+
 
 # Create your models here.
 class Driver(models.Model):
@@ -63,9 +67,10 @@ class DriverCar(models.Model):
 class Order(models.Model):
     restaurant = models.OneToOneField(Restaurant, on_delete=models.CASCADE)
     date = models.DateField(auto_now=True)
+    description = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return f"Order {self.pk} at {self.restaurant.name} on {self.date}"
+        return f"{self.restaurant.name} on {self.date}"
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
@@ -73,4 +78,10 @@ class OrderItem(models.Model):
     quantity = models.IntegerField(validators=[MinValueValidator(0)])
 
     def __str__(self):
-        return f"{self.quantity} x {self.product} in order {self.order.primary_key}"
+        return f"{self.quantity} x {self.product} in order {self.order.restaurant}"
+
+@receiver(post_save, sender=OrderItem)
+@receiver(post_delete, sender=OrderItem )
+def update_order_date(sender, instance, **kwargs):
+    instance.order.date = timezone.now()
+    instance.order.save()

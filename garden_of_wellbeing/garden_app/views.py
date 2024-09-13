@@ -7,6 +7,9 @@ from django.views import View
 from .forms import AddProductForm, AddRestaurantForm
 from .models import Product, Restaurant, Order, OrderItem
 
+from .class_order_view import OrderView
+from .class_order_view import calculate_order_item_subtotal
+
 
 # Create your views here.
 class ProductsListView(View):
@@ -48,10 +51,32 @@ class DeleteProductView(View):
 class RestaurantListView(View):
     def get(self, request, *args, **kwargs):
         restaurants = Restaurant.objects.all().order_by('region')
+        restaurants_data = []
+        total_together = 0
+        for restaurant in restaurants:
+            try:
+                restaurant_order = Order.objects.get(restaurant=restaurant)
+                order_items = OrderItem.objects.filter(order=restaurant_order)
+                order_items_sub, total = calculate_order_item_subtotal(order_items)
+
+            except Order.DoesNotExist:
+                restaurant_order = None
+                order_items = []
+                total = 0
+
+            restaurants_data.append({
+                'restaurant': restaurant,
+                'order_items': order_items,
+                'total': total,
+            })
+            total_together += total
         message = ""
         if not restaurants:
             message = "No Restaurants found"
-        return render(request, "garden_app/restaurant_list.html", {'message':message, 'restaurants':restaurants})
+
+        return render(request, "garden_app/restaurant_list.html", {
+            'message':message, 'restaurants_data': restaurants_data, 'total_together': total_together
+        })
 
 class AddRestaurantView(View):
     def get(self,request,*args,**kwargs):
@@ -84,74 +109,6 @@ class DeleteRestaurantView(View):
         restaurant.delete()
         return redirect('restaurant-list')
 
-class OrderView(View):
-    def get(self, request, restaurant_pk, *args,**kwargs):
-        restaurant = get_object_or_404(Restaurant, pk = restaurant_pk)
-        products = Product.objects.all()
-        message = ""
-
-        try:
-            current_order = restaurant.order
-            order_items = OrderItem.objects.filter(order = current_order)
-
-        except Order.DoesNotExist:
-            current_order = None
-            order_items = []
-            message = "No orders found"
-
-        return render(request, "garden_app/order_detail.html", {
-            "message": message,
-            "restaurant":restaurant, "products": products,
-            "order_items": order_items})
-
-    def post(self, request, restaurant_pk, *args,**kwargs):
-        message = ""
-        act_restaurant = get_object_or_404(Restaurant, pk = restaurant_pk)
-        product_id = request.POST.get("product_id")
-        quantity = request.POST.get("quantity")
-        action = request.POST.get("action")
-
-        if product_id and quantity:
-            act_product = get_object_or_404(Product, pk = product_id)
-            try:
-                restaurant_order = act_restaurant.order
-            except Order.DoesNotExist:
-                restaurant_order = Order.objects.create(restaurant = act_restaurant)
-
-            act_order_item_exists = OrderItem.objects.filter(order = restaurant_order, product = act_product).exists()
-
-            if act_order_item_exists:
-                act_order_item = OrderItem.objects.get(order = restaurant_order, product = act_product)
-                if action == "add":
-                    act_order_item.quantity += int(quantity)
-                if action == "subtract":
-                    act_order_item.quantity -= int(quantity)
-            else:
-                act_order_item = OrderItem.objects.create(order = restaurant_order, product = act_product,
-                                                          quantity = quantity)
-
-            act_order_item.save()
-
-            products = Product.objects.all()
-            order_items = OrderItem.objects.filter(order = restaurant_order)
-            message = "Pruduct successfully added"
-
-            return render(request, "garden_app/order_detail.html", {
-                "order_items": order_items,
-                "message": message,
-                "restaurant": act_restaurant,
-                "products": products})
-
-        products = Product.objects.all()
-        message = "Invalid product or quality"
-        order_items = OrderItem.objects.filter(order = act_restaurant.order) if hasattr(act_restaurant, "order") else []
-
-        return render(request, "garden_app/order_detail.html", {
-            "products": products,
-            "message": message,
-            "restaurant": act_restaurant,
-            "order_items": order_items
-        })
 
 
 

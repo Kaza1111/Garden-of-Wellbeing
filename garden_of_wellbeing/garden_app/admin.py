@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Region, Driver, Restaurant
+from .models import Region, Driver, Restaurant, Order, OrderItem
 from django.contrib.auth.models import User
 # Register your models here.
 
@@ -25,3 +25,14 @@ class RestaurantAdmin(admin.ModelAdmin):
     list_display = ('name', 'city', 'distance', 'region', 'email')
     search_fields = ('name', 'city', 'distance', 'region', 'email')
     list_filter = ('region',)
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('restaurant', 'date')
+    search_fields = ('restaurant', 'date')
+    list_filter = ('restaurant',)
+@admin.register(OrderItem)
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ('order', 'product', 'quantity')
+    search_fields = ('order', 'product', 'quantity')
+    list_filter = ('product',)
