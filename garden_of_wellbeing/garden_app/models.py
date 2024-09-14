@@ -30,9 +30,19 @@ REGION_CHOICES = (
     ('Třeboňsko', 'Třeboňsko'),
     ('Lipensko', 'Lipensko')
 )
+DAYS = (
+    ("Monday", "Monday"),
+    ("Tuesday", "Tuesday"),
+    ("Wednesday", "Wednesday"),
+    ("Thursday", "Thursday"),
+    ("Friday", "Friday"),
+    ("Saturday", "Saturday"),
+
+)
 class Region(models.Model):
     name = models.CharField(max_length=128, choices=REGION_CHOICES)
     driver = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="regions")
+    delivery_day = models.CharField(max_length=128, choices=DAYS)
     def __str__(self):
         return self.name
 class Restaurant(models.Model):
@@ -81,7 +91,12 @@ class OrderItem(models.Model):
         return f"{self.quantity} x {self.product} in order {self.order.restaurant}"
 
 @receiver(post_save, sender=OrderItem)
-@receiver(post_delete, sender=OrderItem )
+@receiver(post_delete, sender=OrderItem)
 def update_order_date(sender, instance, **kwargs):
     instance.order.date = timezone.now()
     instance.order.save()
+
+#@receiver(post_save, sender=Order)
+#def update_order_date_desc(sender, instance, **kwargs):
+ #   instance.date = timezone.now()
+  #  instance.save()

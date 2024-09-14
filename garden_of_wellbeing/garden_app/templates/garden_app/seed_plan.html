@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %} Seed plan {% endblock %}
+
+{% block content %}
+    <div style="display: flex; justify-content: space-between" >
+        <div style="width: 30%">
+            {{dict_sub}}
+        </div>
+        <div style="width: 30%">
+            {% for region in regions %}
+                <strong>{{region.delivery_day}}</strong><br>
+                {% for restaurant in region.restaurants.all %}
+                    ------<strong>{{restaurant}}</strong><br>
+                    {% for item in restaurant.order.items.all%}
+                        -----------------{{item.quantity}}x{{item.product}}, days:{{item.product.days_of_growth}}<br>
+                    {% endfor %}
+                {% endfor%}
+            {% endfor %}
+        </div>
+        <div style="width: 30%">
+            <h2>Seed plan </h2>
+            <table style="border: #1b1b1b solid 1px">
+                <thead>
+                    <tr style="border: #1b1b1b solid 1px">
+                        <th>Product</th>
+                        {% for day_dict in seed_week %}
+                            {% for weekday, date in day_dict.items %}
+                        <th>{{weekday}}</th>
+                            {% endfor %}
+                        {% endfor %}
+                    </tr>
+                     <tr>
+                         <th></th>
+                        {% for day_dict in seed_week %}
+                            {% for weekday, date in day_dict.items %}
+                        <th>{{date}}</th>
+                            {% endfor %}
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>{{product.name}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {% endfor%}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+{% endblock %}

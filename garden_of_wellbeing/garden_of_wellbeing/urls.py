@@ -18,7 +18,8 @@ from django.contrib import admin
 from django.urls import path
 
 from garden_app.views import ProductsListView, AddProductView, EditProductView, DeleteProductView, RestaurantListView, \
-                    AddRestaurantView, EditRestaurantView, DeleteRestaurantView, OrderView
+                    AddRestaurantView, EditRestaurantView, DeleteRestaurantView, OrderView, SeedPlanView
+from garden_app.class_order_view import OrderView
 
 
 urlpatterns = [
@@ -31,6 +32,7 @@ urlpatterns = [
     path('add_restaurant/', AddRestaurantView.as_view(), name='add-restaurant'),
     path('edit_restaurant/<int:restaurant_pk>', EditRestaurantView.as_view(), name='edit-restaurant'),
     path('delete_restaurant/<int:restaurant_pk>', DeleteRestaurantView.as_view(), name='delete-restaurant'),
-    path('order_detail/<int:restaurant_pk>', OrderView.as_view(), name='order-detail')
+    path('order_detail/<int:restaurant_pk>', OrderView.as_view(), name='order-detail'),
+    path('seed_plan_view/', SeedPlanView.as_view(), name='seed-plan')
 
 ]

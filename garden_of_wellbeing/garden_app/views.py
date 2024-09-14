@@ -9,6 +9,7 @@ from .models import Product, Restaurant, Order, OrderItem
 
 from .class_order_view import OrderView
 from .class_order_view import calculate_order_item_subtotal
+from .class_seed_plan_view import SeedPlanView
 
 
 # Create your views here.

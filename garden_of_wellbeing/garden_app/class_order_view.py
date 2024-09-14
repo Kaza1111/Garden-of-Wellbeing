@@ -8,9 +8,10 @@ def calculate_order_item_subtotal(order_items_to_edit):
     for item in order_items_to_edit:
         subtotal = item.product.sale_price * item.quantity
         order_items_subtotal.append({
-            "product": item.product,
+            "product": item.product.name,
+            "days_of_growth": item.product.days_of_growth,
             "quantity": item.quantity,
-            "subtotal": subtotal
+            "subtotal": subtotal,
         })
         total += subtotal
 
@@ -29,6 +30,7 @@ class OrderView(View):
         except Order.DoesNotExist:
             current_order = None
             order_items = []
+            order_items_sub, total = calculate_order_item_subtotal(order_items)
             message = "No orders found"
 
         return render(request, "garden_app/order_detail.html", {
@@ -50,8 +52,14 @@ class OrderView(View):
             act_product = get_object_or_404(Product, pk = product_id)
             try:
                 current_order = act_restaurant.order
+                if description:
+                    current_order.description = description
+                    current_order.save()
+                print(f"Popis try:{current_order.description}")
             except Order.DoesNotExist:
-                current_order = Order.objects.create(restaurant = act_restaurant)
+                current_order = Order.objects.create(restaurant = act_restaurant, description = description
+                                if description else None )
+                print(f"Popis DNE:{current_order.description}")
 
             act_order_item_exists = OrderItem.objects.filter(order = current_order, product = act_product).exists()
 
@@ -87,8 +95,7 @@ class OrderView(View):
                 "current_order": current_order})
 
         products = Product.objects.all()
-        message = "Invalid product or quality"
-        order_items = OrderItem.objects.filter(order = act_restaurant.order) if hasattr(act_restaurant, "order") else []
+        order_items = OrderItem.objects.filter(order=act_restaurant.order) if hasattr(act_restaurant, "order") else []
         order_items_sub, total = calculate_order_item_subtotal(order_items)
 
         return render(request, "garden_app/order_detail.html", {

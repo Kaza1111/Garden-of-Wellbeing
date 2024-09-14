@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 
 @admin.register(Region)
 class RegionAdmin(admin.ModelAdmin):
-    list_display = ('name', 'driver')
-    search_fields = ('name',)
+    list_display = ('name', 'driver', 'delivery_day')
+    search_fields = ('name','delivery_day')
 
 @admin.register(Driver)
 class DriverAdmin(admin.ModelAdmin):
@@ -28,7 +28,7 @@ class RestaurantAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('restaurant', 'date')
+    list_display = ('restaurant', 'date', 'description')
     search_fields = ('restaurant', 'date')
     list_filter = ('restaurant',)
 @admin.register(OrderItem)

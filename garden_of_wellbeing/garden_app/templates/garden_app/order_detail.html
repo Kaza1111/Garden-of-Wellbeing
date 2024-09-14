@@ -32,7 +32,7 @@
                 </table>
             </div>
             <div style="width: 45%; padding-top: 80px; padding-right: 25px">
-                <form>
+                <form method="post" action="{% url 'order-detail' restaurant.pk %}">
                     {% csrf_token %}
                     <label for="description">Note:</label>
                     <textarea id="description" name="description" rows="7" cols="30"></textarea>
@@ -73,7 +73,7 @@
                 </form>
             </div>
             <div style="width: 25%">
-                {{current.order.description}}
+                {{current_order.description}}
             </div>
         </div>
 
