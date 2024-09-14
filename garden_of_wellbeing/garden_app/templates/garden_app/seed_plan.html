@@ -1,59 +1,49 @@
 {% extends "base.html" %}
+{% load custom_filters %}
 
 {% block title %} Seed plan {% endblock %}
 
 {% block content %}
-    <div style="display: flex; justify-content: space-between" >
-        <div style="width: 30%">
-            {{dict_sub}}
-        </div>
-        <div style="width: 30%">
-            {% for region in regions %}
-                <strong>{{region.delivery_day}}</strong><br>
-                {% for restaurant in region.restaurants.all %}
-                    ------<strong>{{restaurant}}</strong><br>
-                    {% for item in restaurant.order.items.all%}
-                        -----------------{{item.quantity}}x{{item.product}}, days:{{item.product.days_of_growth}}<br>
-                    {% endfor %}
-                {% endfor%}
+    <h2>Seed plan</h2>
+    <table style="border: #1b1b1b solid 1px; width: 80%">
+        <thead>
+            <tr style="border: #1b1b1b solid 1px">
+                <th>Product</th>
+                {% for day_dict in seed_week %}
+                    <th style="background-color: {{ day_dict.color }}">{{ day_dict.weekday }}</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th></th>
+                {% for day_dict in seed_week %}
+                    <th style="background-color: {{ day_dict.color }}">{{ day_dict.date }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                {% for day_dict in seed_week %}
+                    {% with product_counts|get_item:product.pk as day_data %}
+                        {% if day_data %}
+                            {% with day_data|get_item:day_dict.weekday as product_info %}
+                                <td style="background-color: {{ product_info.delivery_color|default:'#fff' }}">
+                                    {{ product_info.count|default:0 }}
+                                </td>
+                            {% endwith %}
+                        {% else %}
+                            <td style="background-color: #fff">0</td>
+                        {% endif %}
+                    {% endwith %}
+                {% endfor %}
+            </tr>
             {% endfor %}
-        </div>
-        <div style="width: 30%">
-            <h2>Seed plan </h2>
-            <table style="border: #1b1b1b solid 1px">
-                <thead>
-                    <tr style="border: #1b1b1b solid 1px">
-                        <th>Product</th>
-                        {% for day_dict in seed_week %}
-                            {% for weekday, date in day_dict.items %}
-                        <th>{{weekday}}</th>
-                            {% endfor %}
-                        {% endfor %}
-                    </tr>
-                     <tr>
-                         <th></th>
-                        {% for day_dict in seed_week %}
-                            {% for weekday, date in day_dict.items %}
-                        <th>{{date}}</th>
-                            {% endfor %}
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for product in products %}
-                    <tr>
-                        <td>{{product.name}}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    {% endfor%}
-                </tbody>
-            </table>
-
-        </div>
-    </div>
+        </tbody>
+    </table>
 {% endblock %}
+
+
+
+
+

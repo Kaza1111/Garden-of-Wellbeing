@@ -1,9 +1,9 @@
 from datetime import date, timedelta
-
 from django.views import View
 from .models import Product, Restaurant, Order, OrderItem, Region
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render
 from .class_order_view import calculate_order_item_subtotal
+
 
 class SeedPlanView(View):
     def get(self, request, *args, **kwargs):
@@ -12,42 +12,86 @@ class SeedPlanView(View):
         regions = Region.objects.all()
         today = date.today()
 
-        monday_region = Region.objects.filter(delivery_day='Monday').first()
-        tuesday_region = Region.objects.filter(delivery_day='Tuesday').first()
-        wednesday_region = Region.objects.filter(delivery_day='Wednesday').first()
-        thursday_region = Region.objects.filter(delivery_day='Thursday').first()
-        friday_region = Region.objects.filter(delivery_day='Friday').first()
+        # Barvy pro každý den v týdnu
+        weekday_colors = {
+            'Monday': '#FFD700',  # žlutá
+            'Tuesday': '#FFA500',  # oranžová
+            'Wednesday': '#FF6347',  # červená
+            'Thursday': '#ADFF2F',  # zelená
+            'Friday': '#FFC0CB',  # růžová
+            'Saturday': '#87CEEB',  # modrá
+            'Sunday': '#9370DB'  # fialová
+        }
 
-        for restaurant in thursday_region.restaurants.all():
-            try:
-                rest_order=restaurant.order
-                order_items = OrderItem.objects.filter(order=rest_order)
-                dict_sub, total = calculate_order_item_subtotal(order_items)
-                for item in dict_sub:
-                    print(item['product'])
-                    print(item['quantity'])
-                    print(item['days_of_growth'])
-                    print("------------------------")
-                #print(dict_sub[0]['days_of_growth'])
-            except Order.DoesNotExist:
-                rest_order = None
-                print(rest_order)
+        # Definování týdenních dnů pro výpočet doručení
+        week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
+        # Vytvoření seed_week se 14 dny
         seed_week = []
-        for i in range(7):
-            formatted_day = today.strftime("%d.%m")
-            weekday = today.strftime("%A")
-            seed_week.append({weekday: formatted_day})
-            today += timedelta(days=1)
+        current_day = today
+        for i in range(14):  # Rozšíření na 14 dnů
+            weekday = current_day.strftime("%A")
+            seed_week.append({
+                'weekday': weekday,
+                'date': current_day.strftime("%d.%m"),
+                'color': weekday_colors[weekday]
+            })
+            current_day += timedelta(days=1)
 
-        week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        # Vytvoření prázdného slovníku pro počty produktů podle dní a barev
+        product_counts = {}
+        for product in products:
+            product_counts[product.pk] = {}
 
+        # Projít regiony a restaurace, zjistit den doručení a počty produktů
+        for region in regions:
+            delivery_weekday = region.delivery_day  # Přímo použijeme den doručení jako řetězec
 
-        return render (request, 'garden_app/seed_plan.html', {
-            'orders': orders,
-            'regions': regions,
-            'today': today,
-            'seed_week': seed_week,
+            for restaurant in region.restaurants.all():
+                try:
+                    rest_order = restaurant.order
+                    order_items = OrderItem.objects.filter(order=rest_order)
+
+                    dict_sub, total = calculate_order_item_subtotal(order_items)
+
+                    for item in dict_sub:
+                        product = item['product']
+                        quantity = item['quantity']
+                        growth_days = item['days_of_growth']
+
+                        # Kdy má být produkt zaset
+                        delivery_day = today + timedelta((week.index(delivery_weekday) - today.weekday()) % 7)
+                        seed_day = delivery_day - timedelta(days=growth_days)
+                        seed_weekday = seed_day.strftime('%A')
+
+                        # Přidej počty a barvy do slovníku product_counts
+                        if product.pk not in product_counts:
+                            product_counts[product.pk] = {}
+
+                        if seed_weekday not in product_counts[product.pk]:
+                            product_counts[product.pk][seed_weekday] = {
+                                'count': 0,
+                                'delivery_color': weekday_colors[delivery_weekday]
+                            }
+
+                        product_counts[product.pk][seed_weekday]['count'] += quantity
+
+                except Order.DoesNotExist:
+                    continue
+
+        # Předat data do šablony
+        return render(request, 'garden_app/seed_plan.html', {
             'products': products,
-            'dict_sub': dict_sub
+            'seed_week': seed_week,
+            'product_counts': product_counts
         })
+
+
+
+
+
+
+
+
+
+

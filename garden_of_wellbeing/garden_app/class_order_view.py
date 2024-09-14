@@ -8,7 +8,7 @@ def calculate_order_item_subtotal(order_items_to_edit):
     for item in order_items_to_edit:
         subtotal = item.product.sale_price * item.quantity
         order_items_subtotal.append({
-            "product": item.product.name,
+            "product": item.product,
             "days_of_growth": item.product.days_of_growth,
             "quantity": item.quantity,
             "subtotal": subtotal,
