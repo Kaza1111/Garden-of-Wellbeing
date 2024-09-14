@@ -52,14 +52,12 @@ class OrderView(View):
             act_product = get_object_or_404(Product, pk = product_id)
             try:
                 current_order = act_restaurant.order
-                if description:
-                    current_order.description = description
-                    current_order.save()
-                print(f"Popis try:{current_order.description}")
+                #if description:
+                 #   current_order.description = description
+                  #  current_order.save()
+                #print(f"Popis try:{current_order.description}")
             except Order.DoesNotExist:
-                current_order = Order.objects.create(restaurant = act_restaurant, description = description
-                                if description else None )
-                print(f"Popis DNE:{current_order.description}")
+                current_order = Order.objects.create(restaurant = act_restaurant, description = description)
 
             act_order_item_exists = OrderItem.objects.filter(order = current_order, product = act_product).exists()
 
@@ -94,14 +92,24 @@ class OrderView(View):
                 "total": total,
                 "current_order": current_order})
 
-        products = Product.objects.all()
-        order_items = OrderItem.objects.filter(order=act_restaurant.order) if hasattr(act_restaurant, "order") else []
-        order_items_sub, total = calculate_order_item_subtotal(order_items)
+        if description:
+            try:
+                current_order = act_restaurant.order
+                current_order.description = description
+                current_order.save()
+                print(f"Popis try:{current_order.description}")
+            except Order.DoesNotExist:
+                current_order = Order.objects.create(restaurant = act_restaurant, description = description)
 
-        return render(request, "garden_app/order_detail.html", {
-            "products": products,
-            "message": message,
-            "restaurant": act_restaurant,
-            "order_items": order_items_sub,
-            "total": total,
+            products = Product.objects.all()
+            order_items = OrderItem.objects.filter(order=act_restaurant.order) if hasattr(act_restaurant, "order") else []
+            order_items_sub, total = calculate_order_item_subtotal(order_items)
+
+            return render(request, "garden_app/order_detail.html", {
+                "products": products,
+                "message": message,
+                "restaurant": act_restaurant,
+                "order_items": order_items_sub,
+                "total": total,
+                "current_order": current_order
         })
