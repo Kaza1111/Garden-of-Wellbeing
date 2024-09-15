@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 def calculate_order_item_subtotal(order_items_to_edit):
     order_items_subtotal = []
     total = 0
+    total_quantity = 0
     for item in order_items_to_edit:
         subtotal = item.product.sale_price * item.quantity
         order_items_subtotal.append({
@@ -14,8 +15,9 @@ def calculate_order_item_subtotal(order_items_to_edit):
             "subtotal": subtotal,
         })
         total += subtotal
+        total_quantity += item.quantity
 
-    return order_items_subtotal, total
+    return order_items_subtotal, total, total_quantity
 class OrderView(View):
     def get(self, request, restaurant_pk, *args,**kwargs):
         restaurant = get_object_or_404(Restaurant, pk = restaurant_pk)
@@ -25,12 +27,12 @@ class OrderView(View):
         try:
             current_order = restaurant.order
             order_items = OrderItem.objects.filter(order = current_order)
-            order_items_sub, total = calculate_order_item_subtotal(order_items)
+            order_items_sub, total, total_quantity = calculate_order_item_subtotal(order_items)
 
         except Order.DoesNotExist:
             current_order = None
             order_items = []
-            order_items_sub, total = calculate_order_item_subtotal(order_items)
+            order_items_sub, total, total_quantity= calculate_order_item_subtotal(order_items)
             message = "No orders found"
 
         return render(request, "garden_app/order_detail.html", {
@@ -38,6 +40,7 @@ class OrderView(View):
             "restaurant":restaurant, "products": products,
             "order_items": order_items_sub,
             "total": total,
+            "total_quantity": total_quantity,
             "current_order": current_order})
 
     def post(self, request, restaurant_pk, *args,**kwargs):
@@ -52,10 +55,6 @@ class OrderView(View):
             act_product = get_object_or_404(Product, pk = product_id)
             try:
                 current_order = act_restaurant.order
-                #if description:
-                 #   current_order.description = description
-                  #  current_order.save()
-                #print(f"Popis try:{current_order.description}")
             except Order.DoesNotExist:
                 current_order = Order.objects.create(restaurant = act_restaurant, description = description)
 
@@ -81,7 +80,7 @@ class OrderView(View):
 
             products = Product.objects.all()
             order_items = OrderItem.objects.filter(order = current_order)
-            order_items_sub, total = calculate_order_item_subtotal(order_items)
+            order_items_sub, total, total_quantity = calculate_order_item_subtotal(order_items)
 
 
             return render(request, "garden_app/order_detail.html", {
@@ -90,6 +89,7 @@ class OrderView(View):
                 "restaurant": act_restaurant,
                 "products": products,
                 "total": total,
+                "total_quantity": total_quantity,
                 "current_order": current_order})
 
         if description:
@@ -103,7 +103,7 @@ class OrderView(View):
 
             products = Product.objects.all()
             order_items = OrderItem.objects.filter(order=act_restaurant.order) if hasattr(act_restaurant, "order") else []
-            order_items_sub, total = calculate_order_item_subtotal(order_items)
+            order_items_sub, total, total_quantity = calculate_order_item_subtotal(order_items)
 
             return render(request, "garden_app/order_detail.html", {
                 "products": products,
@@ -111,5 +111,6 @@ class OrderView(View):
                 "restaurant": act_restaurant,
                 "order_items": order_items_sub,
                 "total": total,
+                "total_quantity": total_quantity,
                 "current_order": current_order
         })

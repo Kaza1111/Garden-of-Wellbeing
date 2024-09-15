@@ -41,7 +41,7 @@
             </div>
         </div>
         <div style="width: 60%; padding: 10px; border-right: 1px solid #ccc; display: flex; justify-content: space-between">
-            <div style="width: 60%; padding-right: 5px">
+            <div style="width: 60%; padding-right: 5px; border-right: 1px solid #ccc">
                 <h3>Actual order:</h3>
                 <i>Last update: {{current_order.date}}</i>
                 <i>{{message}}</i> <br>
@@ -61,10 +61,13 @@
                             <td>{{ item.subtotal }}</td>
                         </tr>
                         {% endfor %}
+                        <tr style="border-top: #1b1b1b solid">
+                            <td style="text-align: left">TOTAL</td>
+                            <td style="text-align: left">{{ total_quantity }}</td>
+                            <td style="text-align: left">{{ total }}</td>
+                        </tr>
                     </tbody>
                 </table>
-                <br>
-                Total: {{ total }}
                 <br>
                 <br>
                 <br>

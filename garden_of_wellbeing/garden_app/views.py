@@ -54,29 +54,35 @@ class RestaurantListView(View):
         restaurants = Restaurant.objects.all().order_by('region')
         restaurants_data = []
         total_together = 0
+        total_together_quantity = 0
+
         for restaurant in restaurants:
             try:
                 restaurant_order = Order.objects.get(restaurant=restaurant)
                 order_items = OrderItem.objects.filter(order=restaurant_order)
-                order_items_sub, total = calculate_order_item_subtotal(order_items)
+                order_items_sub, total, total_quantity = calculate_order_item_subtotal(order_items)
 
             except Order.DoesNotExist:
                 restaurant_order = None
                 order_items = []
                 total = 0
+                total_quantity = 0
 
             restaurants_data.append({
                 'restaurant': restaurant,
                 'order_items': order_items,
                 'total': total,
+                'total_quantity': total_quantity,
             })
             total_together += total
+            total_together_quantity += total_quantity
         message = ""
         if not restaurants:
             message = "No Restaurants found"
 
         return render(request, "garden_app/restaurant_list.html", {
-            'message':message, 'restaurants_data': restaurants_data, 'total_together': total_together
+            'message':message, 'restaurants_data': restaurants_data, 'total_together': total_together,
+            'total_together_quantity': total_together_quantity
         })
 
 class AddRestaurantView(View):

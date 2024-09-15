@@ -52,7 +52,8 @@ class SeedPlanView(View):
                     rest_order = restaurant.order
                     order_items = OrderItem.objects.filter(order=rest_order)
 
-                    dict_sub, total = calculate_order_item_subtotal(order_items)
+                    dict_sub, total, total_quantity = calculate_order_item_subtotal(order_items)
+                    total_quantity_growth_day = 0
 
                     for item in dict_sub:
                         product = item['product']
@@ -75,6 +76,7 @@ class SeedPlanView(View):
                             }
 
                         product_counts[product.pk][seed_weekday]['count'] += quantity
+                        total_quantity_growth_day += product_counts[product.pk][seed_weekday]['count']
 
                 except Order.DoesNotExist:
                     continue
@@ -83,7 +85,8 @@ class SeedPlanView(View):
         return render(request, 'garden_app/seed_plan.html', {
             'products': products,
             'seed_week': seed_week,
-            'product_counts': product_counts
+            'product_counts': product_counts,
+            'total_quantity_growth_day': total_quantity_growth_day
         })
 
 
