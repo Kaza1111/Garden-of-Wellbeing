@@ -4,13 +4,25 @@
     <meta charset="UTF-8">
     <title>{%block title%} Title {%endblock%}</title>
 </head>
+<header style="padding-bottom: 10px; border-bottom: grey solid">
+    {% if request.user.is_authenticated %}
+        <div>{{ request.user.first_name }} </div>
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+    {% endif %}
+</header>
+
 <body>
     Navagation:
-    <ul>
+    <ul style="padding-bottom: 10px; border-bottom: #1b1b1b solid">
         <li><a href="{% url 'products' %}"> Product list </a></li>
         <li><a href="{% url 'restaurant-list' %}">Restaurant list</a></li>
         <li><a href="{% url 'seed-plan' %}">Seeds plan</a></li>
-        <li><a href="">Anything else</a></li>
+        <li><a href="{% url 'calculation' %}">Calculations</a></li>
     </ul>
     <br>
     {% block content %}

@@ -16,13 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.shortcuts import redirect
+from django.contrib.auth.views import LoginView, LogoutView
 
 from garden_app.views import ProductsListView, AddProductView, EditProductView, DeleteProductView, RestaurantListView, \
-                    AddRestaurantView, EditRestaurantView, DeleteRestaurantView, OrderView, SeedPlanView
+                    AddRestaurantView, EditRestaurantView, DeleteRestaurantView, OrderView, SeedPlanView, CalculationView
 from garden_app.class_order_view import OrderView
 
 
 urlpatterns = [
+    path('', lambda request: redirect('login'), name='root'),
     path('admin/', admin.site.urls),
     path('products/', ProductsListView.as_view(), name='products'),
     path('add_product/', AddProductView.as_view(), name='add-product'),
@@ -33,6 +36,9 @@ urlpatterns = [
     path('edit_restaurant/<int:restaurant_pk>', EditRestaurantView.as_view(), name='edit-restaurant'),
     path('delete_restaurant/<int:restaurant_pk>', DeleteRestaurantView.as_view(), name='delete-restaurant'),
     path('order_detail/<int:restaurant_pk>', OrderView.as_view(), name='order-detail'),
-    path('seed_plan_view/', SeedPlanView.as_view(), name='seed-plan')
+    path('seed_plan_view/', SeedPlanView.as_view(), name='seed-plan'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('calculation/', CalculationView.as_view(), name='calculation')
 
 ]

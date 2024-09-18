@@ -1,6 +1,9 @@
 from itertools import product
 from urllib import request
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 
@@ -10,10 +13,13 @@ from .models import Product, Restaurant, Order, OrderItem
 from .class_order_view import OrderView
 from .class_order_view import calculate_order_item_subtotal
 from .class_seed_plan_view import SeedPlanView
+from .calculation_view import CalculationView
+
 
 
 # Create your views here.
-class ProductsListView(View):
+class ProductsListView(LoginRequiredMixin ,View):
+    login_url = '/login/'
     def get(self,request,*args,**kwargs):
         products = Product.objects.all().order_by('days_of_growth')
         return render(request, "garden_app/products.html", {'products': products})
@@ -29,7 +35,8 @@ class AddProductView(View):
             return redirect('products')
         return render(request, "garden_app/add_product.html")
 
-class EditProductView(View):
+class EditProductView(PermissionRequiredMixin , View):
+    permission_required = 'garden_app.change_product'
     def get(self, request, product_pk, *args, **kwargs):
         product = get_object_or_404(Product, pk=product_pk)
         form = AddProductForm(instance=product)
@@ -44,12 +51,14 @@ class EditProductView(View):
         return render(request, "garden_app/edit_product.html", {'form': form})
 
 class DeleteProductView(View):
+    permission_required = 'garden_app.delete_product'
     def get(self,request,product_pk,*args,**kwargs):
         product = Product.objects.get(pk=product_pk)
         product.delete()
         return redirect('products')
 
-class RestaurantListView(View):
+class RestaurantListView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def get(self, request, *args, **kwargs):
         restaurants = Restaurant.objects.all().order_by('region')
         restaurants_data = []
@@ -115,6 +124,7 @@ class DeleteRestaurantView(View):
         restaurant = get_object_or_404(Restaurant, pk = restaurant_pk)
         restaurant.delete()
         return redirect('restaurant-list')
+
 
 
 

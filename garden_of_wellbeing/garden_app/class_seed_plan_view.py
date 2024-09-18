@@ -1,11 +1,14 @@
 from datetime import date, timedelta
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from .models import Product, Restaurant, Order, OrderItem, Region
 from django.shortcuts import render
 from .class_order_view import calculate_order_item_subtotal
 
 
-class SeedPlanView(View):
+class SeedPlanView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def get(self, request, *args, **kwargs):
         products = Product.objects.all()
         orders = Order.objects.all()

@@ -1,0 +1,13 @@
+{% extends "base.html"%}
+
+{% block title %} Calculation {% endblock %}
+
+{% block content %}
+    {% for product_cost in products_costs %}
+        {{product_cost.product.name}}: {{product_cost.calculate_product_cost}} <br>
+    {% endfor %}
+    <br>
+    {% for region in regions %}
+        {{region}}:{{region.calculate_delivery_time_km}}<br>
+    {% endfor %}
+{% endblock %}

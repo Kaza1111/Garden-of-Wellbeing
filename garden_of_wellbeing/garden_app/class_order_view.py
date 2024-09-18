@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from .models import Product, Restaurant, Order, OrderItem
 from django.shortcuts import render, redirect, get_object_or_404
@@ -18,7 +19,8 @@ def calculate_order_item_subtotal(order_items_to_edit):
         total_quantity += item.quantity
 
     return order_items_subtotal, total, total_quantity
-class OrderView(View):
+class OrderView(LoginRequiredMixin, View):
+    login_url = '/login/'
     def get(self, request, restaurant_pk, *args,**kwargs):
         restaurant = get_object_or_404(Restaurant, pk = restaurant_pk)
         products = Product.objects.all()
