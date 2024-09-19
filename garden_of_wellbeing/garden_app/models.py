@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.utils import timezone
-from .class_order_view import calculate_order_item_subtotal
+
 
 
 # Create your models here.
@@ -130,12 +130,15 @@ class DeliveryCost(models.Model):
     salary_cost = models.IntegerField(null=True, blank=True,)
     total_products_costs = models.IntegerField(null=True, blank=True)
     total_delivery_costs = models.IntegerField(null=True, blank=True)
+    total_sales = models.IntegerField(null=True, blank=True)
+    margin = models.IntegerField(null=True, blank=True)
 
     def get_driver(self):
         return self.region.driver
 
     @property
     def calculate_delivery_cost(self):
+        from .class_order_view import calculate_order_item_subtotal
         print(f"++++++++++++++++++++++++REGION: {self.region} +++++++++++++++++++++++")
         
         self.fuel_cost = int(self.car.consumption / 100 * self.region.km * self.fuel_price)
@@ -144,14 +147,17 @@ class DeliveryCost(models.Model):
         self.salary_cost = int(self.car.users.first().salary * (self.region.deliver_time + self.region.preparing_time))
         print(f"salary:{self.salary_cost}")
         self.total_products_costs = 0
+        self.total_sales = 0
 
         for restaurant in self.region.restaurants.all():
             print(f"{restaurant}-----------------------------")
             try:
                 order = restaurant.order
                 order_products_costs = 0
-                #items = order.items.all()
-                for item in order.items.all():
+                items = order.items.all()
+                subtotal_czk, total_czk, total_quantity = calculate_order_item_subtotal(items)
+                self.total_sales += total_czk
+                for item in items:
                     one_product_cost = ProductCost.objects.get(product=item.product)
                     product_costs = one_product_cost.calculate_product_cost * item.quantity
                     print(f"{item.product}:{product_costs}")
@@ -162,8 +168,11 @@ class DeliveryCost(models.Model):
 
             except Order.DoesNotExist:
                 self.total_products_costs += 0
-
+                self.total_sales += 0
+        print(f"TOTAL SALES:{self.total_sales}")
         self.total_delivery_costs = int(self.total_products_costs) + int(self.fuel_cost) + int(self.salary_cost)
+        self.margin = int(self.total_sales - self.total_delivery_costs)
+        print(f"Margin{self.margin}")
         self.save()
 
         print(f"Total delivery costs per {self.region.name}: {self.total_delivery_costs}")

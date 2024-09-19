@@ -3,25 +3,29 @@
 {% block title %} Calculation {% endblock %}
 
 {% block content %}
-    <h1>Calculation</h1>
+    <h2>Calculation</h2>
     <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 50%; text-align: left;">
         <thead>
             <tr>
-                <th>Delivery route</th>
+                <th></th>
+                <th>Total sales</th>
+                <th>Total delivery cost</th>
+                <th>Products costs</th>
                 <th>Fuel cost</th>
                 <th>Salary cost</th>
-                <th>Products costs</th>
-                <th>Total delivery cost</th>
+                <th>Margin</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 {% for delivery_cost in delivery_costs %}
                 <td><strong>{{delivery_cost.region}}<strong></strong></td>
+                <td>{{delivery_cost.total_sales}}</td>
+                <td>{{delivery_cost.total_delivery_costs}}</td>
+                <td>{{delivery_cost.total_products_costs}}</td>
                 <td>{{delivery_cost.fuel_cost}}</td>
                 <td>{{delivery_cost.salary_cost}}</td>
-                <td>{{delivery_cost.total_products_costs}}</td>
-                <td>{{delivery_cost.total_delivery_costs}}</td>
+                <td>{{delivery_cost.margin}}</td>
             </tr>
         {% endfor %}
         </tbody>

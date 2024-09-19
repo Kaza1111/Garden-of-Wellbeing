@@ -11,6 +11,5 @@ class CalculationView(View):
             method = delivery_cost.calculate_delivery_cost
             print(delivery_cost.total_delivery_costs)
 
-
-
         return render(request, 'garden_app/calculation.html', {"delivery_costs" : delivery_costs})
+
