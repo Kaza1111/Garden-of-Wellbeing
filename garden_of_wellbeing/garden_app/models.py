@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.utils import timezone
+from .class_order_view import calculate_order_item_subtotal
 
 
 # Create your models here.
@@ -121,9 +122,14 @@ class Car(models.Model):
 
 class DeliveryCost(models.Model):
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
-    region = models.ForeignKey(Region, on_delete=models.CASCADE, name="delivery_costs")
+    region = models.ForeignKey(Region, on_delete=models.CASCADE, related_name="delivery_costs")
     fuel_price = models.IntegerField(default=32)
     date = models.DateField(auto_now=True)
+
+    fuel_cost = models.IntegerField(null=True, blank=True)
+    salary_cost = models.IntegerField(null=True, blank=True,)
+    total_products_costs = models.IntegerField(null=True, blank=True)
+    total_delivery_costs = models.IntegerField(null=True, blank=True)
 
     def get_driver(self):
         return self.region.driver
@@ -132,33 +138,37 @@ class DeliveryCost(models.Model):
     def calculate_delivery_cost(self):
         print(f"++++++++++++++++++++++++REGION: {self.region} +++++++++++++++++++++++")
         
-        fuel_cost = self.car.consumption / 100 * self.region.km * self.fuel_price
-        print(f"fuel:{fuel_cost}")
+        self.fuel_cost = int(self.car.consumption / 100 * self.region.km * self.fuel_price)
+        print(f"fuel:{self.fuel_cost}")
         #amortization
-        salary_cost = self.car.users.first().salary * (self.region.deliver_time + self.region.preparing_time)
-        print(f"salary:{salary_cost}")
-        order_costs_region = 0
+        self.salary_cost = int(self.car.users.first().salary * (self.region.deliver_time + self.region.preparing_time))
+        print(f"salary:{self.salary_cost}")
+        self.total_products_costs = 0
 
         for restaurant in self.region.restaurants.all():
             print(f"{restaurant}-----------------------------")
             try:
                 order = restaurant.order
-                order_costs_restaurant = 0
+                order_products_costs = 0
+                #items = order.items.all()
                 for item in order.items.all():
-                    product_cost = ProductCost.objects.get(product=item.product)
-                    product_costs = product_cost.calculate_product_cost * item.quantity
+                    one_product_cost = ProductCost.objects.get(product=item.product)
+                    product_costs = one_product_cost.calculate_product_cost * item.quantity
                     print(f"{item.product}:{product_costs}")
-                    order_costs_restaurant += product_costs
-                order_costs_region += order_costs_restaurant
-                print(f"Order cost per restaurant: {order_costs_restaurant}")
+                    order_products_costs += product_costs
+
+                self.total_products_costs += int(order_products_costs)
+                print(f"Order cost per restaurant: {order_products_costs}")
 
             except Order.DoesNotExist:
-                order_costs_region += 0
+                self.total_products_costs += 0
 
-        total_delivery_cost = order_costs_region + fuel_cost + salary_cost
-        print(f"Total delivery costs per {self.region.name}: {total_delivery_cost}")
+        self.total_delivery_costs = int(self.total_products_costs) + int(self.fuel_cost) + int(self.salary_cost)
+        self.save()
+
+        print(f"Total delivery costs per {self.region.name}: {self.total_delivery_costs}")
         print("----------------------------------")
-        return int(total_delivery_cost),
+        return int(self.total_delivery_costs)
 
 
     def __str__(self):

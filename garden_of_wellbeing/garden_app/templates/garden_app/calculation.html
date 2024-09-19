@@ -3,11 +3,27 @@
 {% block title %} Calculation {% endblock %}
 
 {% block content %}
-    {% for product_cost in products_costs %}
-        {{product_cost.product.name}}: {{product_cost.calculate_product_cost}} <br>
-    {% endfor %}
-    <br>
-    {% for region in regions %}
-        {{region}}:{{region.calculate_delivery_time_km}}<br>
-    {% endfor %}
+    <h1>Calculation</h1>
+    <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 50%; text-align: left;">
+        <thead>
+            <tr>
+                <th>Delivery route</th>
+                <th>Fuel cost</th>
+                <th>Salary cost</th>
+                <th>Products costs</th>
+                <th>Total delivery cost</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% for delivery_cost in delivery_costs %}
+                <td><strong>{{delivery_cost.region}}<strong></strong></td>
+                <td>{{delivery_cost.fuel_cost}}</td>
+                <td>{{delivery_cost.salary_cost}}</td>
+                <td>{{delivery_cost.total_products_costs}}</td>
+                <td>{{delivery_cost.total_delivery_costs}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
