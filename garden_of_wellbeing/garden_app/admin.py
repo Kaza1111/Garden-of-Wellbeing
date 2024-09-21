@@ -57,5 +57,5 @@ class OrderItemAdmin(admin.ModelAdmin):
 class ProductCostAdmin(admin.ModelAdmin):
     list_display = ('product', 'kw_price', 'watts', 'lighting_hours', 'salary', 'total_product_cost')
 
-    def total_product_cost(self, obj):
-        return obj.calculate_product_cost
+    #def total_product_cost(self, obj):
+     #   return obj.calculate_product_cost

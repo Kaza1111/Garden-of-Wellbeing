@@ -33,15 +33,20 @@ class ProductCost(models.Model):
     watts = models.IntegerField(default=60)
     lighting_hours = models.IntegerField(default=18)
     salary = models.IntegerField(default=250)
-    @property
-    def calculate_product_cost(self):
-        seed_cost = (self.product.cost_price * self.product.seeds_amount / 1000)
-        labor_time = (self.product.seeding_time + (self.product.watering_time * 2 * self.product.days_of_growth))
-        labor_cost = (labor_time * (self.salary / 3600))
-        light_cost = (self.kw_price / 1000 * self.watts * self.lighting_hours / 48 )
-        total_product_cost = seed_cost + labor_cost + light_cost
+    total_product_cost = models.IntegerField()
 
-        return round(total_product_cost,1)
+    #možná je blbost mít tuto funkci v modelu
+    #@property
+    def calculate_product_cost(self):
+        seed_cost = int((self.product.cost_price * self.product.seeds_amount / 1000))
+        labor_time = int((self.product.seeding_time + (self.product.watering_time * 2 * self.product.days_of_growth)))
+        labor_cost = int((labor_time * (self.salary / 3600)))
+        light_cost = int((self.kw_price / 1000 * self.watts * self.lighting_hours / 48 ))
+        self.total_product_cost = int(seed_cost + labor_cost + light_cost)
+
+        self.save()
+
+        return round(self.total_product_cost,1)
 
 REGION_CHOICES = (
     ('Šumava', 'Šumava'),
@@ -136,7 +141,8 @@ class DeliveryCost(models.Model):
     def get_driver(self):
         return self.region.driver
 
-    @property
+    #možná blbost mít tuto funkci v modelu
+    #@property
     def calculate_delivery_cost(self):
         from .class_order_view import calculate_order_item_subtotal
         print(f"++++++++++++++++++++++++REGION: {self.region} +++++++++++++++++++++++")
@@ -159,7 +165,7 @@ class DeliveryCost(models.Model):
                 self.total_sales += total_czk
                 for item in items:
                     one_product_cost = ProductCost.objects.get(product=item.product)
-                    product_costs = one_product_cost.calculate_product_cost * item.quantity
+                    product_costs = one_product_cost.calculate_product_cost() * item.quantity
                     print(f"{item.product}:{product_costs}")
                     order_products_costs += product_costs
 

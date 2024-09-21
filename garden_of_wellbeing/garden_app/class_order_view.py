@@ -48,6 +48,7 @@ class OrderView(LoginRequiredMixin, View):
     def post(self, request, restaurant_pk, *args,**kwargs):
         message = ""
         act_restaurant = get_object_or_404(Restaurant, pk = restaurant_pk)
+
         product_id = request.POST.get("product_id")
         quantity = request.POST.get("quantity")
         action = request.POST.get("action")
