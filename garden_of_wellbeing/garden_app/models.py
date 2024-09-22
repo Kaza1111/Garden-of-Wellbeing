@@ -33,16 +33,22 @@ class ProductCost(models.Model):
     watts = models.IntegerField(default=60)
     lighting_hours = models.IntegerField(default=18)
     salary = models.IntegerField(default=250)
-    total_product_cost = models.IntegerField()
+
+    total_product_cost = models.FloatField()
 
     #možná je blbost mít tuto funkci v modelu
     #@property
     def calculate_product_cost(self):
+        print(self.kw_price)
+
         seed_cost = int((self.product.cost_price * self.product.seeds_amount / 1000))
         labor_time = int((self.product.seeding_time + (self.product.watering_time * 2 * self.product.days_of_growth)))
         labor_cost = int((labor_time * (self.salary / 3600)))
-        light_cost = int((self.kw_price / 1000 * self.watts * self.lighting_hours / 48 ))
-        self.total_product_cost = int(seed_cost + labor_cost + light_cost)
+        light_cost = float(self.kw_price / 1000 * self.watts * self.lighting_hours / 48 )
+        print(light_cost)
+        print(f"Before:{self.total_product_cost}")
+        self.total_product_cost = float(seed_cost + labor_cost + light_cost)
+        print(f"After:{self.total_product_cost}")
 
         self.save()
 
@@ -69,36 +75,38 @@ class Region(models.Model):
     name = models.CharField(max_length=128, choices=REGION_CHOICES)
     driver = models.ForeignKey(Driver, on_delete=models.CASCADE, related_name="regions")
     delivery_day = models.CharField(max_length=128, choices=DAYS)
+
     km = models.IntegerField()
+
     deliver_time = models.FloatField()
     preparing_time = models.FloatField()
 
     def calculate_delivery_time_km(self):
         kilometers = 0
         count = 0
-        deliver_hours = 0
         items_count_reg = 0
-        print(self.name)
+        print("vstup modelu REGION-------------------------------------------------------")
+        print(f"REGION:{self.name}-----------------")
         for restaurant in self.restaurants.all():
-            print(restaurant)
+            print(f"------RESTAURACE:{restaurant.name}")
             kilometers += restaurant.distance
             count += 1
-            deliver_hours += kilometers / 50
             try:
                 order = restaurant.order
                 items_count_rest = 0
                 for item in order.items.all():
-                    items_count_rest += 1
-                    print(items_count_rest)
+                    print(item)
+                    items_count_rest += item.quantity
             except Order.DoesNotExist:
                 items_count_rest = 0
-
+            print(f"Produktů v objednávce za restauraci: {items_count_rest}")
             items_count_reg += items_count_rest
+            print(f"Kilometry za restiky kumulované: Přechozí porce + {restaurant.distance} = {kilometers}")
         print(f"REGION COUNT:{items_count_reg}")
 
-        self.preparing_time = items_count_reg / 12 / 4 * 3
-        self.deliver_time = deliver_hours + count * 0.2
+        self.preparing_time = ( items_count_reg / 12 / 4 * 3 ) / 60
         self.km = (kilometers / count * 2 * 1.5)
+        self.deliver_time = (self.km/ 50)+ count * 0.2
         self.save()
         return self.km, self.deliver_time, self.preparing_time
     def __str__(self):
@@ -131,9 +139,12 @@ class DeliveryCost(models.Model):
     fuel_price = models.IntegerField(default=32)
     date = models.DateField(auto_now=True)
 
+
     fuel_cost = models.IntegerField(null=True, blank=True)
     salary_cost = models.IntegerField(null=True, blank=True,)
+
     total_products_costs = models.IntegerField(null=True, blank=True)
+
     total_delivery_costs = models.IntegerField(null=True, blank=True)
     total_sales = models.IntegerField(null=True, blank=True)
     margin = models.IntegerField(null=True, blank=True)
@@ -148,10 +159,12 @@ class DeliveryCost(models.Model):
         print(f"++++++++++++++++++++++++REGION: {self.region} +++++++++++++++++++++++")
         
         self.fuel_cost = int(self.car.consumption / 100 * self.region.km * self.fuel_price)
-        print(f"fuel:{self.fuel_cost}")
+        print(f"Consumption:{self.car.consumption} and Regin km:{self.region.km} and {self.fuel_price} = fuel:{self.fuel_cost}")
         #amortization
+        self.region.calculate_delivery_time_km()
         self.salary_cost = int(self.car.users.first().salary * (self.region.deliver_time + self.region.preparing_time))
-        print(f"salary:{self.salary_cost}")
+
+        print(f"Hour salary:{self.car.users.first().salary}+ Deliver region time{self.region.deliver_time}+ preparing orders time {self.region.preparing_time}= salary cost per employee:{self.salary_cost}")
         self.total_products_costs = 0
         self.total_sales = 0
 
@@ -165,8 +178,9 @@ class DeliveryCost(models.Model):
                 self.total_sales += total_czk
                 for item in items:
                     one_product_cost = ProductCost.objects.get(product=item.product)
-                    product_costs = one_product_cost.calculate_product_cost() * item.quantity
-                    print(f"{item.product}:{product_costs}")
+                    print(f"{one_product_cost.product.name}")
+                    product_costs = one_product_cost.total_product_cost * item.quantity
+                    print(f"Náklady na druh jsou:{product_costs} = {item.quantity} * {one_product_cost.total_product_cost}")
                     order_products_costs += product_costs
 
                 self.total_products_costs += int(order_products_costs)
@@ -175,6 +189,7 @@ class DeliveryCost(models.Model):
             except Order.DoesNotExist:
                 self.total_products_costs += 0
                 self.total_sales += 0
+        print(f"Product cost per REGION: {self.total_products_costs}")
         print(f"TOTAL SALES:{self.total_sales}")
         self.total_delivery_costs = int(self.total_products_costs) + int(self.fuel_cost) + int(self.salary_cost)
         self.margin = int(self.total_sales - self.total_delivery_costs)
