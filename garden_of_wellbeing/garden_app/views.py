@@ -18,12 +18,14 @@ from .calculation_view import CalculationView
 
 
 # Create your views here.
+#Get list of products, with buttons "edit","add" and "delete"
 class ProductsListView(LoginRequiredMixin ,View):
     login_url = '/login/'
     def get(self,request,*args,**kwargs):
         products = Product.objects.all().order_by('days_of_growth')
         return render(request, "garden_app/products.html", {'products': products})
 
+#Possibility to add a new product, display a form
 class AddProductView(View):
     def get(self, request, *args, **kwargs):
         form = AddProductForm()
@@ -33,8 +35,9 @@ class AddProductView(View):
         if form.is_valid():
             form.save()
             return redirect('products')
-        return render(request, "garden_app/add_product.html")
+        return render(request, "garden_app/add_product.html", {"form": form})
 
+#Posibility to edit existing product, display a form
 class EditProductView(PermissionRequiredMixin , View):
     permission_required = 'garden_app.change_product'
     def get(self, request, product_pk, *args, **kwargs):
@@ -50,6 +53,7 @@ class EditProductView(PermissionRequiredMixin , View):
             return redirect('products')
         return render(request, "garden_app/edit_product.html", {'form': form})
 
+#Posibility to delete existing product if you click the button
 class DeleteProductView(View):
     permission_required = 'garden_app.delete_product'
     def get(self,request,product_pk,*args,**kwargs):
@@ -57,6 +61,7 @@ class DeleteProductView(View):
         product.delete()
         return redirect('products')
 
+#Display a list of restaurants with total sales and quantites, if not any restaurant, display message
 class RestaurantListView(LoginRequiredMixin, View):
     login_url = '/login/'
     def get(self, request, *args, **kwargs):
@@ -94,6 +99,7 @@ class RestaurantListView(LoginRequiredMixin, View):
             'total_together_quantity': total_together_quantity
         })
 
+#Posibility to add a new restaurant, display a form
 class AddRestaurantView(View):
     def get(self,request,*args,**kwargs):
         form = AddRestaurantForm()
@@ -105,6 +111,7 @@ class AddRestaurantView(View):
             return redirect('restaurant-list')
         return render(request, "garden_app/add_restaurant.html", {'form':form})
 
+#Posibility to edit existing restaurant, display a form
 class EditRestaurantView(View):
     def get(self,request, restaurant_pk, *args,**kwargs):
         restaurant = get_object_or_404(Restaurant, pk=restaurant_pk)
@@ -119,6 +126,7 @@ class EditRestaurantView(View):
             return redirect('restaurant-list')
         return render(request, "garden_app/edit_restaurant.html", {"form": form})
 
+#Posibility to delete existing restaurant
 class DeleteRestaurantView(View):
     def get(self, request, restaurant_pk, *args,**kwargs):
         restaurant = get_object_or_404(Restaurant, pk = restaurant_pk)

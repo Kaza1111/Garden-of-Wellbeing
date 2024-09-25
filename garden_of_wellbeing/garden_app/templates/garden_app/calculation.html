@@ -42,18 +42,33 @@
                 <tr><td>Fuel price</td>
                     <td><input type="number" name="fuel_price"></td>
                     <td><button type="submit">Submit</button></td></tr>
+                        {% if errors.fuel_price %}
+                        <div class="error">{{ errors.fuel_price }}</div>
+                        {% endif %}
                 <tr><td>Salary</td>
                     <td><input type="number" name="salary"></td>
                     <td><button type="submit">Submit</button></td></tr></tr>
+                        {% if errors.salary %}
+                        <div class="error">{{ errors.salary }}</div>
+                        {% endif %}
                 <tr><td>KW Price</td>
                     <td><input type="number" name="kw_price"></td>
                     <td><button type="submit">Submit</button></td></tr></tr>
+                        {% if errors.kw_price %}
+                        <div class="error">{{ errors.kw_price }}</div>
+                        {% endif %}
                 <tr><td>Watts</td>
                     <td><input type="number" name="watts"></td>
                     <td><button type="submit">Submit</button></td></tr></tr>
+                        {% if errors.watts %}
+                        <div class="error">{{ errors.watts }}</div>
+                        {% endif %}
                 <tr><td>Lighting hours</td>
                     <td><input type="number" name="lighting_hours"></td>
                     <td><button type="submit">Submit</button></td></tr></tr>
+                        {% if errors.lighting_hours %}
+                        <div class="error">{{ errors.lighting_hours }}</div>
+                        {% endif %}
             </form>
             </table>
         </div>

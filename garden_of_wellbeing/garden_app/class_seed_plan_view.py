@@ -6,7 +6,8 @@ from .models import Product, Restaurant, Order, OrderItem, Region
 from django.shortcuts import render
 from .class_order_view import calculate_order_item_subtotal
 
-
+# Display a table with the seed plan. The first column represents today, followed by the next 13 days.
+# Each cell contains the number of a specific product that needs to be seeded in order to be ready for the delivery day.
 class SeedPlanView(LoginRequiredMixin, View):
     login_url = '/login/'
     def get(self, request, *args, **kwargs):
@@ -15,7 +16,7 @@ class SeedPlanView(LoginRequiredMixin, View):
         regions = Region.objects.all()
         today = date.today()
 
-        # Barvy pro každý den v týdnu
+        # Colors for every day of the week
         weekday_colors = {
             'Monday': '#FFD700',  # žlutá
             'Tuesday': '#FFA500',  # oranžová
@@ -26,13 +27,12 @@ class SeedPlanView(LoginRequiredMixin, View):
             'Sunday': '#9370DB'  # fialová
         }
 
-        # Definování týdenních dnů pro výpočet doručení
         week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
-        # Vytvoření seed_week se 14 dny
+        # Create seed_week with 14 days
         seed_week = []
         current_day = today
-        for i in range(14):  # Rozšíření na 14 dnů
+        for i in range(14):
             weekday = current_day.strftime("%A")
             seed_week.append({
                 'weekday': weekday,
@@ -41,6 +41,7 @@ class SeedPlanView(LoginRequiredMixin, View):
             })
             current_day += timedelta(days=1)
 
+        total_quantity_growth_day = 0
         # Vytvoření prázdného slovníku pro počty produktů podle dní a barev
         product_counts = {}
         for product in products:
@@ -91,6 +92,7 @@ class SeedPlanView(LoginRequiredMixin, View):
             'product_counts': product_counts,
             'total_quantity_growth_day': total_quantity_growth_day
         })
+
 
 
 

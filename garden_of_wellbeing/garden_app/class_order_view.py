@@ -3,6 +3,7 @@ from django.views import View
 from .models import Product, Restaurant, Order, OrderItem
 from django.shortcuts import render, redirect, get_object_or_404
 
+#Calculate sales and quantites for every product in order and sales and quantities for whole order
 def calculate_order_item_subtotal(order_items_to_edit):
     order_items_subtotal = []
     total = 0
@@ -19,6 +20,8 @@ def calculate_order_item_subtotal(order_items_to_edit):
         total_quantity += item.quantity
 
     return order_items_subtotal, total, total_quantity
+
+#Display a order detail for every restaurant (even if restaurant has no order), possibility to add items and note to order
 class OrderView(LoginRequiredMixin, View):
     login_url = '/login/'
     def get(self, request, restaurant_pk, *args,**kwargs):
@@ -54,6 +57,7 @@ class OrderView(LoginRequiredMixin, View):
         action = request.POST.get("action")
         description = request.POST.get("description")
 
+        #Add products to order
         if product_id and quantity:
             act_product = get_object_or_404(Product, pk = product_id)
             try:
@@ -94,7 +98,7 @@ class OrderView(LoginRequiredMixin, View):
                 "total": total,
                 "total_quantity": total_quantity,
                 "current_order": current_order})
-
+        #Add note
         if description:
             try:
                 current_order = act_restaurant.order

@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'garden_app'
+    'garden_app',
 ]
 
 MIDDLEWARE = [
@@ -78,7 +78,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'garden_dtb',
-        'USER': 'postgres',
+        'USER': 'tomaskazik',
         'PASSWORD': 'coderslab',
         'HOST': 'localhost',
         'PORT': '5432',
