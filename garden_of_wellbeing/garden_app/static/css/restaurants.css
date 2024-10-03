@@ -1,0 +1,100 @@
+.restaurant-table-container {
+    margin: 0 auto;
+    width: 100%; /* Zmenšení šířky kontejneru pro tabulku */
+    text-align: center;
+}
+
+.restaurant-table {
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-size: 11px; /* Zmenšení písma pro celou tabulku */
+    line-height: 1; /* Zmenšení výšky řádku */
+    table-layout: fixed; /* Fix width for uniform columns */
+    max-width: 100%; /* Zajištění 100% šířky pro tabulku */
+    border: #000000 solid 3px;
+}
+
+.restaurant-table thead th {
+    background-color: #2b593e;
+    color: #ffffff; /* Bílé písmo pro hlavičku */
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.8;
+}
+
+.restaurant-table tbody tr:nth-child(even) {
+    background-color: #f2f4f8;
+}
+
+.restaurant-table tbody td {
+    text-align: center;
+    vertical-align: middle;
+    word-wrap: break-word; /* Zajištění přenosu textu do sloupců */
+    padding: 5px; /* Reduce padding for smaller rows */
+}
+
+/* Adjust action column */
+.restaurant-table tbody td:last-child {
+    white-space: nowrap;
+    width: 25%; /* Změněno na 25% pro více místa */
+}
+
+/* Equal column width */
+.restaurant-table thead th, .restaurant-table tbody td {
+    width: 10%; /* Adjust the column width as needed */
+}
+
+/* Adjust distance and email columns */
+.restaurant-table tbody td:nth-child(3) { /* Distance column */
+    width: 9%; /* Adjusted width for distance column */
+}
+
+.restaurant-table tbody td:nth-child(7) { /* Email column */
+    word-wrap: break-word; /* Ensure email wraps if it's too long */
+    max-width: 120px; /* Set a maximum width for email */
+}
+
+/* Button styles */
+.restaurant-table button, .restaurant-btn-add {
+    margin: 2px;
+    font-size: 10px; /* Zmenšení písma pro tlačítka */
+    background-color: #2b593e; /* Zelená barva */
+    color: white; /* White text for buttons */
+    border: none;
+    padding: 2px 6px; /* Zmenšeno pro menší tlačítka */
+    border-radius: 20px;
+    transition: all 0.3s ease-in-out;
+}
+
+.restaurant-btn-add {
+    font-size: 15px; /* Zmenšení písma pro tlačítka */
+}
+
+/* Hover effect for buttons */
+.restaurant-table button:hover, .restaurant-btn-add:hover {
+    background-color: #218838; /* Slightly darker green on hover */
+    transform: scale(1.05);
+}
+
+/* Space below the "Add New Restaurant" button */
+.restaurant-table-container form {
+    margin-top: 20px;
+    margin-bottom: 40px; /* Increase margin below the form for space */
+}
+
+/* Specific styles for Add Restaurant button */
+.restaurant-btn-add {
+    margin-bottom: 20px; /* Přidání prostoru pod tlačítko */
+}
+
+
+
+
+
+
+
+
+
+

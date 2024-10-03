@@ -1,0 +1,90 @@
+.product-table-container {
+    margin: 0 auto;
+    width: 50%; /* Zajištění centrování tabulky */
+    text-align: center;
+}
+
+.product-table {
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-size: 11px;
+    line-height: 1;
+    table-layout: fixed;
+    width: 100%; /* Zajištění 100% šířky uvnitř kontejneru */
+    border: #000000 solid 2px;
+}
+
+.product-table thead th {
+    background-color: #2b593e;
+    color: #ffffff;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.8;
+}
+
+.product-table tbody tr:nth-child(even) {
+    background-color: #f2f4f8;
+}
+
+.product-table tbody td {
+    text-align: center;
+    vertical-align: middle;
+    word-wrap: break-word;
+    padding: 5px;
+}
+
+/* Adjust action column */
+.product-table tbody td:last-child {
+    white-space: nowrap;
+    width: 15%; /* Zúžení sloupce Actions */
+}
+
+/* Equal column width */
+.product-table thead th, .product-table tbody td {
+    width: 14%; /* Upravená šířka ostatních sloupců pro rovnoměrné rozložení */
+}
+
+/* Button styles */
+.product-table button, .product-btn-add {
+    margin: 2px;
+    font-size: 10px;
+    background-color: #2b593e;
+    color: white;
+    border: none;
+    padding: 2px 6px;
+    border-radius: 20px;
+    transition: all 0.3s ease-in-out;
+}
+
+.product-btn-add {
+    font-size: 15px;
+}
+
+/* Hover effect for buttons */
+.product-table button:hover, .product-btn-add:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+/* Space below the "Add New Product" button */
+.product-table-container form {
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+/* Specific styles for Add Product button */
+.product-btn-add {
+    margin-bottom: 20px;
+}
+
+
+
+
+
+
+
+
+
+

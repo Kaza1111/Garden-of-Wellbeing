@@ -1,0 +1,148 @@
+.calculation-table-container {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 30px;
+    width: 100%;
+    text-align: center;
+}
+
+.calculation-table {
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-size: 12px; /* Mírně větší písmo pro tabulku */
+    line-height: 1.5;
+    table-layout: auto;
+    width: 100%;
+    border-collapse: collapse; /* Odstranění mezer mezi buňkami */
+    border: #ffffff solid 2px;
+}
+
+.calculation-table thead th {
+    background-color: #2b593e;
+    color: #ffffff;
+    font-weight: 600;
+    text-align: center;
+    padding: 10px;
+}
+
+.calculation-table tbody tr:nth-child(even) {
+    background-color: #f2f4f8;
+}
+
+.calculation-table tbody td {
+    text-align: center;
+    padding: 10px;
+    vertical-align: middle;
+}
+
+.calculation-table tbody td:first-child {
+    font-weight: bold;
+    text-align: left;
+}
+
+/* Formulář jako menší tabulka */
+.calculation-form {
+    width: 60%; /* Změněno pro větší přehlednost */
+    padding-left: 20px;
+}
+
+.calculation-form h4 {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+/* Tabulka formuláře */
+.calculation-form table {
+    width: 60%;
+    font-size: 12px;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: 50%;
+    border: #ffffff solid 2px;
+}
+
+/* Hlavička formulářové tabulky */
+.calculation-form thead th {
+    background-color: #2b593e;
+    color: #ffffff;
+    font-weight: 600;
+    text-align: center;
+    padding: 10px;
+}
+
+.calculation-form td {
+    padding: 10px;
+    vertical-align: middle;
+    text-align: left;
+}
+
+.calculation-form input[type="number"] {
+    width: 100%;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 10px;
+}
+
+.calculation-form button {
+    background-color: #2b593e;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+.calculation-form button:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+.calculation-form .error {
+    color: red;
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+/* Mezery pro margin a zarovnání */
+.calculation-table-container {
+    margin-top: 20px;
+}
+
+/* Zajištění výšky tabulky formuláře */
+.calculation-table, .calculation-form table {
+    height: 100%; /* Zajištění stejné výšky */
+}
+
+.calculation-table-container .calculation-form {
+    margin-left: 40px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

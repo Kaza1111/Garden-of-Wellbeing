@@ -85,7 +85,6 @@ class SeedPlanView(LoginRequiredMixin, View):
                 except Order.DoesNotExist:
                     continue
 
-        # Předat data do šablony
         return render(request, 'garden_app/seed_plan.html', {
             'products': products,
             'seed_week': seed_week,

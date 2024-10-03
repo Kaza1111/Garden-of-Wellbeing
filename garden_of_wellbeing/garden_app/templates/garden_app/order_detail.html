@@ -1,56 +1,58 @@
 {% extends "base.html" %}
 
-{% block title %} Products {% endblock %}
+{% block title %} Order Detail {% endblock %}
 
 {% block content %}
-<h1>{{ restaurant.name }}</h1>
-    <div style="display: flex; justify-content: space-between">
-        <div style="width: 40%; padding: 10px; border-right: 1px solid #ccc; display: flex; justify-content: space-between">
-            <div style="width: 45%; padding-right: 5px">
-                <h3>Products:</h3>
-                <br>
+<div class="order-details"> <!-- Přidána třída wrapperu -->
+    <div class="container">
+        <div class="section">
+            <!-- První div s produkty -->
+            <div class="section-left">
+                <h3>Microgreens</h3>
                 <table>
+                    <thead>
+                        <tr>
+                            <th>Druh</th>
+                            <th>Přidat/Odebrat</th> <!-- Zrušen sloupec Quantity -->
+                        </tr>
+                    </thead>
                     <tbody>
                         {% for product in products %}
                         <tr>
-                            <td> {{ product.name }} </td>
-                            <td><form method="post" action=" {% url 'order-detail' restaurant.pk %}">
+                            <td>{{ product.name }}</td>
+                            <td>
+                                <form method="post" action="{% url 'order-detail' restaurant.pk %}" style="display:inline;">
                                     {% csrf_token %}
-                                    <input type="hidden" name="product_id" value="{{product.id}}">
-
+                                    <input type="hidden" name="product_id" value="{{ product.id }}">
                                     <input type="hidden" name="quantity" value="1">
-                                    <button type="submit" name="action" value="add" style="display: inline">+</button>
-
+                                    <button type="submit" name="action" value="add" class="button-small">+</button>
                                     <input type="hidden" name="quantity" value="1">
-                                    <button type="submit" name="action" value="subtract" style="display: inline">-</button>
+                                    <button type="submit" name="action" value="subtract" class="button-small">-</button>
                                 </form>
                             </td>
-                            <td></td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+                <div class="form-note">
+                    <form method="post" action="{% url 'order-detail' restaurant.pk %}">
+                        {% csrf_token %}
+                        <label for="description">Přidat poznámku:</label>
+                        <textarea id="description" name="description" rows="4" placeholder="Add a note..."></textarea>
+                        <button type="submit" class="btn-add save-button">Uložit poznámku</button> <!-- Tlačítko zarovnané s Back -->
+                    </form>
+                </div>
             </div>
-            <div style="width: 45%; padding-top: 80px; padding-right: 25px">
-                <form method="post" action="{% url 'order-detail' restaurant.pk %}">
-                    {% csrf_token %}
-                    <label for="description">Note:</label>
-                    <textarea id="description" name="description" rows="7" cols="30"></textarea>
-                    <button type="submit">Save</button>
-                </form>
-            </div>
-        </div>
-        <div style="width: 60%; padding: 10px; border-right: 1px solid #ccc; display: flex; justify-content: space-between">
-            <div style="width: 60%; padding-right: 5px; border-right: 1px solid #ccc">
-                <h3>Actual order:</h3>
-                <i>Last update: {{current_order.date}}</i>
-                <i>{{message}}</i> <br>
-                <table style="width: 70%; border-collapse: collapse; border: 1px solid #ddd;">
+
+            <!-- Druhý div s actual order -->
+            <div class="section-right">
+                <h3>Aktuální objednávka <span class="last-update">(Last update: {{ current_order.date }})</span></h3>
+                <table>
                     <thead>
                         <tr>
-                            <th style="text-align: left">Product Name</th>
-                            <th style="text-align: left">Quantity</th>
-                            <th style="text-align: left">Subtotal</th>
+                            <th>Druh</th>
+                            <th>Množství</th>
+                            <th>Tržba</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -61,27 +63,31 @@
                             <td>{{ item.subtotal }}</td>
                         </tr>
                         {% endfor %}
-                        <tr style="border-top: #1b1b1b solid">
-                            <td style="text-align: left">TOTAL</td>
-                            <td style="text-align: left">{{ total_quantity }}</td>
-                            <td style="text-align: left">{{ total }}</td>
+                        <tr>
+                            <td><strong>------CELKEM------</strong></td>
+                            <td>{{ total_quantity }}</td>
+                            <td>{{ total }}</td>
                         </tr>
                     </tbody>
                 </table>
-                <br>
-                <br>
-                <br>
+                <div class="note-section">
+                    <h6>Poznámka:</h6>
+                    <p>{{ current_order.description }}</p>
+                </div>
                 <form method="get" action="{% url 'restaurant-list' %}">
-                    <button type="submit">Restaurant list</button>
+                    <button type="submit" class="btn-add back-button">Zpět na seznam restaurací</button> <!-- Tlačítko zarovnané s Save -->
                 </form>
             </div>
-            <div style="width: 25%; padding-right: 10px">
-                <h3>Note:</h3>
-                <br>
-                {{current_order.description}}
-            </div>
         </div>
-
     </div>
 
+    <!-- Přidání prostoru pod stránkou -->
+    <div class="footer-space"></div>
+</div> <!-- Konec wrapperu order-details -->
 {% endblock %}
+
+
+
+
+
+

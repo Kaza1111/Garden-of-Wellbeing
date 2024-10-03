@@ -20,12 +20,16 @@ from django.shortcuts import redirect
 from django.contrib.auth.views import LoginView, LogoutView
 
 from garden_app.views import ProductsListView, AddProductView, EditProductView, DeleteProductView, RestaurantListView, \
-                    AddRestaurantView, EditRestaurantView, DeleteRestaurantView, OrderView, SeedPlanView, CalculationView
+                    AddRestaurantView, EditRestaurantView, DeleteRestaurantView
 from garden_app.class_order_view import OrderView
+from garden_app.class_seed_plan_view import SeedPlanView
+from garden_app.class_order_view import OrderView
+from garden_app.calculation_view import CalculationView
 
 
 urlpatterns = [
-    path('', lambda request: redirect('login'), name='root'),
+    #poladit redirect a homepage
+    path('', lambda request: redirect('seed-plan'), name='root'),
     path('admin/', admin.site.urls),
     path('products/', ProductsListView.as_view(), name='products'),
     path('add_product/', AddProductView.as_view(), name='add-product'),

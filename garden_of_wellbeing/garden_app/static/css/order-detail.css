@@ -1,0 +1,128 @@
+/* Styl pro container a rozložení */
+.order-details .container {
+    width: 90%;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.order-details .section {
+    display: flex;
+    justify-content: space-between;
+}
+
+.order-details .section-left,
+.order-details .section-right {
+    width: 48%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background-color: #f9f9f9;
+}
+
+/* Vzhled tabulek */
+.order-details table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    line-height: 1;
+}
+
+.order-details table th,
+.order-details table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    font-size: 14px;
+}
+
+.order-details table th {
+    background-color: #2b593e;
+    color: #fff;
+}
+
+/* Styl tlačítek pro přidávání/odebírání množství */
+.order-details .button-small {
+    background-color: #2b593e;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 8px;
+    margin: 0 3px;
+}
+
+.order-details button:hover {
+    background-color: #218838;
+}
+
+/* Styl pro textarea */
+.order-details textarea {
+    width: 100%;
+    padding: 6px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 12px;
+    height: 60px;
+}
+
+.order-details textarea:focus {
+    outline: none;
+    border-color: #2b593e;
+}
+
+/* Styl pro nadpis a poznámku */
+.order-details .note-section {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #f2f4f8;
+    border-radius: 8px;
+    color: #333;
+    font-style: italic;
+    font-size: 13px;
+}
+
+.order-details .form-note {
+    margin-top: 10px;
+}
+
+/* Styl pro tlačítka */
+.order-details .btn-add {
+    background-color: #2b593e;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.order-details .btn-add:hover {
+    background-color: #218838;
+}
+
+/* Zarovnání tlačítek Save Note a Back */
+.order-details .save-button,
+.order-details .back-button {
+    margin-bottom: 10px;
+}
+
+/* Menší font pro last update */
+.order-details .last-update {
+    font-size: 12px;
+    color: #666;
+    margin-left: 10px;
+}
+
+/* Přidání prostoru pod stránkou před footerem */
+.order-details .footer-space {
+    height: 50px; /* Přidání volného prostoru pod stránkou */
+}
+
+
+
+
+
+
+
+

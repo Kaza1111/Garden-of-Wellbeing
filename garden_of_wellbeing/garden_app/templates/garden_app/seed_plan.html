@@ -5,18 +5,15 @@
 
 {% block content %}
     <h2>Seed plan</h2>
-    <table style="border: #1b1b1b solid 1px; width: 80%">
+    <table class="seed-plan-table">
         <thead>
-            <tr style="border: #1b1b1b solid 1px">
-                <th>Product</th>
-                {% for day_dict in seed_week %}
-                    <th style="background-color: {{ day_dict.color }}">{{ day_dict.weekday }}</th>
-                {% endfor %}
-            </tr>
             <tr>
                 <th></th>
                 {% for day_dict in seed_week %}
-                    <th style="background-color: {{ day_dict.color }}">{{ day_dict.date }}</th>
+                    <th class="double-header" style="background-color: {{ day_dict.color }}">
+                        <span>{{ day_dict.weekday }}</span>
+                        <span>{{ day_dict.date }}</span>
+                    </th>
                 {% endfor %}
             </tr>
         </thead>
@@ -40,9 +37,19 @@
             </tr>
             {% endfor %}
         </tbody>
-        {{total_quantity_growth_day}}
     </table>
 {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

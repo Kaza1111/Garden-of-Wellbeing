@@ -1,0 +1,101 @@
+/* Global Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f2f4f8;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Tímto zajistíme, že tělo zabere minimálně 100% výšky obrazovky */
+}
+
+main {
+    flex: 1; /* Tímto zajistíme, že hlavní obsah zabere zbývající prostor */
+}
+
+/* Navigační panel */
+.navbar {
+    background-color: #2b593e;
+    padding: 15px 30px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand img.logo {
+    height: 60px; /* Zmenšení výšky loga */
+    margin: 0; /* Odstranění bílého prostoru kolem loga */
+    border-radius: 45px; /* Zaoblení okrajů */
+    overflow: hidden; /* Skrytí přebytečného prostoru */
+}
+
+.navbar-brand .navbar-text {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 20px; /* Zmenšíme text loga */
+}
+
+/* Navigační odkazy */
+.nav-link {
+    color: #e9e9e9;
+    margin-right: 20px; /* Snížíme mezery */
+    font-size: 18px;
+    font-weight: 500;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #ffffff; /* Změna barvy při hoveru */
+}
+
+/* Zvýraznění aktuální stránky */
+.nav-link.active {
+    color: #ffffff; /* Bílé písmo pro aktivní stránku */
+    border-bottom: 2px solid #ffffff; /* Bílé podtržení pro aktivní stránku */
+}
+
+/* Tlačítko pro odhlášení */
+.btn-logout {
+    background-color: #CC3434; /* Změna barvy tlačítka */
+    color: #fff;
+    border-radius: 30px;
+    padding: 8px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.btn-logout:hover {
+    background-color: #ff4f4f; /* Tmavší odstín při hoveru */
+}
+
+/* Footer */
+footer {
+    background-color: #2b593e;
+    color: #fff;
+    text-align: center;
+    padding: 10px; /* Snížení výšky footeru */
+    width: 100%;
+    box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.1);
+}
+
+footer img.footer-logo {
+    height: 50px; /* Zmenšení loga */
+    margin: 0; /* Odstranění bílého prostoru kolem loga */
+    border-radius: 45px; /* Zaoblení okrajů */
+    overflow: hidden; /* Skrytí přebytečného prostoru */
+}
+
+footer p {
+    margin: 0;
+    font-size: 14px;
+    color: #e9e9e9;
+    padding-top: 0px; /* Malý odstup od loga */
+}
+
+
+
+
+
+

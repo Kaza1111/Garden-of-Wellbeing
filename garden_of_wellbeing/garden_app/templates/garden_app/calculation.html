@@ -1,13 +1,12 @@
-{% extends "base.html"%}
+{% extends "base.html" %}
 
 {% block title %} Calculation {% endblock %}
 
 {% block content %}
     <h2>Calculation</h2>
-    <div style="display: flex; justify-content: left">
-        <div style="width: 50%; border-right: #1b1b1b solid 1px; margin-left: 40px">
-            <h4>Actual data</h4>
-            <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 50%; text-align: left;">
+    <div class="calculation-table-container">
+        <div class="calculation-table">
+            <table>
                 <thead>
                     <tr>
                         <th></th>
@@ -22,55 +21,100 @@
                 <tbody>
                     <tr>
                         {% for delivery_cost in delivery_costs %}
-                        <td><strong>{{delivery_cost.region}}<strong></strong></td>
-                        <td>{{delivery_cost.total_sales}}</td>
-                        <td>{{delivery_cost.total_delivery_costs}}</td>
-                        <td>{{delivery_cost.total_products_costs}}</td>
-                        <td>{{delivery_cost.fuel_cost}}</td>
-                        <td>{{delivery_cost.salary_cost}}</td>
-                        <td>{{delivery_cost.margin}}</td>
+                        <td><strong>{{ delivery_cost.region }}</strong></td>
+                        <td>{{ delivery_cost.total_sales }}</td>
+                        <td>{{ delivery_cost.total_delivery_costs }}</td>
+                        <td>{{ delivery_cost.total_products_costs }}</td>
+                        <td>{{ delivery_cost.fuel_cost }}</td>
+                        <td>{{ delivery_cost.salary_cost }}</td>
+                        <td>{{ delivery_cost.margin }}</td>
                     </tr>
-                {% endfor %}
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
-        <div style="width: 30%; padding-left: 40px">
-            <h4>Change parameters</h4>
+        <div class="calculation-form">
             <table>
-            <form method="post" action="{% url 'calculation' %}">
-                {% csrf_token %}
-                <tr><td>Fuel price</td>
-                    <td><input type="number" name="fuel_price"></td>
-                    <td><button type="submit">Submit</button></td></tr>
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Value</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <form method="post" action="{% url 'calculation' %}">
+                        {% csrf_token %}
+                        <tr>
+                            <td>Fuel price</td>
+                            <td><input type="number" name="fuel_price"></td>
+                            <td><button type="submit">Submit</button></td>
+                        </tr>
                         {% if errors.fuel_price %}
-                        <div class="error">{{ errors.fuel_price }}</div>
+                        <tr>
+                            <td colspan="3" class="error">{{ errors.fuel_price }}</td>
+                        </tr>
                         {% endif %}
-                <tr><td>Salary</td>
-                    <td><input type="number" name="salary"></td>
-                    <td><button type="submit">Submit</button></td></tr></tr>
+                        <tr>
+                            <td>Salary</td>
+                            <td><input type="number" name="salary"></td>
+                            <td><button type="submit">Submit</button></td>
+                        </tr>
                         {% if errors.salary %}
-                        <div class="error">{{ errors.salary }}</div>
+                        <tr>
+                            <td colspan="3" class="error">{{ errors.salary }}</td>
+                        </tr>
                         {% endif %}
-                <tr><td>KW Price</td>
-                    <td><input type="number" name="kw_price"></td>
-                    <td><button type="submit">Submit</button></td></tr></tr>
+                        <tr>
+                            <td>KW Price</td>
+                            <td><input type="number" name="kw_price"></td>
+                            <td><button type="submit">Submit</button></td>
+                        </tr>
                         {% if errors.kw_price %}
-                        <div class="error">{{ errors.kw_price }}</div>
+                        <tr>
+                            <td colspan="3" class="error">{{ errors.kw_price }}</td>
+                        </tr>
                         {% endif %}
-                <tr><td>Watts</td>
-                    <td><input type="number" name="watts"></td>
-                    <td><button type="submit">Submit</button></td></tr></tr>
+                        <tr>
+                            <td>Watts</td>
+                            <td><input type="number" name="watts"></td>
+                            <td><button type="submit">Submit</button></td>
+                        </tr>
                         {% if errors.watts %}
-                        <div class="error">{{ errors.watts }}</div>
+                        <tr>
+                            <td colspan="3" class="error">{{ errors.watts }}</td>
+                        </tr>
                         {% endif %}
-                <tr><td>Lighting hours</td>
-                    <td><input type="number" name="lighting_hours"></td>
-                    <td><button type="submit">Submit</button></td></tr></tr>
+                        <tr>
+                            <td>Lighting hours</td>
+                            <td><input type="number" name="lighting_hours"></td>
+                            <td><button type="submit">Submit</button></td>
+                        </tr>
                         {% if errors.lighting_hours %}
-                        <div class="error">{{ errors.lighting_hours }}</div>
+                        <tr>
+                            <td colspan="3" class="error">{{ errors.lighting_hours }}</td>
+                        </tr>
                         {% endif %}
-            </form>
+                    </form>
+                </tbody>
             </table>
         </div>
     </div>
 {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -65,6 +65,7 @@ def test_product_add_view():
 
     assert response.status_code == 302
     product_exists = Product.objects.filter(name= product_data['name']).exists()
+    assert product_exists
 
 #Test if the product was successfully edited
 @pytest.mark.django_db

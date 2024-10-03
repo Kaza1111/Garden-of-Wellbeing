@@ -1,0 +1,95 @@
+/* Obecné nastavení pro tabulku */
+.seed-plan-table {
+    width: 90%; /* Zmenšení šířky tabulky */
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border-radius: 20px; /* Mírné zaoblení celé tabulky */
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-size: 13px; /* Menší písmo */
+    margin: 20px auto; /* Vycentrování tabulky */
+    border: #000000 solid 3px;
+}
+
+.seed-plan-table thead th {
+    padding: 10px; /* Mírně menší padding */
+    background-color: #2b593e; /* Základní barva pro hlavičku */
+    color: #000000;
+    font-weight: 600;
+    text-align: center;
+    border-right: 1px solid #e6e6e6;
+    border-bottom: 2px solid #000000;
+}
+
+/* První sloupec s názvy produktů */
+.seed-plan-table tbody td:first-child {
+    background-color: #2b593e;
+    color: #ffffff;
+    font-weight: bold;
+    text-align: left;
+    padding-left: 15px;
+    border-right: 1px solid #e6e6e6;
+}
+
+/* Buňky v tabulce */
+.seed-plan-table tbody td {
+    text-align: center;
+    padding: 8px 10px; /* Zmenšení paddingu */
+    vertical-align: middle;
+    border-right: 1px solid #e6e6e6;
+    color: #000000; /* Černé písmo pro ostatní buňky */
+    transition: background-color 0.3s ease;
+}
+
+/* Ostatní buňky */
+.seed-plan-table tbody td:last-child {
+    border-right: none;
+}
+
+/* Alternativní barvy řádků */
+.seed-plan-table tbody tr:nth-child(even) {
+    background-color: #f8f8f8;
+}
+
+/* Zajištění konzistence - odstranění zaoblení rohů v prvním a posledním sloupci */
+.seed-plan-table thead th:first-child,
+.seed-plan-table thead th:last-child,
+.seed-plan-table tbody td:first-child,
+.seed-plan-table tbody td:last-child {
+    border-radius: 0; /* Žádné zaoblení rohů */
+}
+
+/* Sjednocení prvního a druhého řádku v hlavičce */
+.seed-plan-table thead th.double-header {
+    height: 45px; /* Nastavení menší výšky */
+    line-height: 1.2; /* Středění textu v jedné buňce */
+}
+
+.seed-plan-table thead th.double-header span {
+    display: block;
+}
+
+/* Pro lepší rozvržení */
+.seed-plan-table tbody td {
+    width: auto;
+    min-width: 50px; /* Minimální šířka buněk */
+    max-width: 100px; /* Maximální šířka buněk */
+    overflow-wrap: break-word; /* Přizpůsobení textu */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

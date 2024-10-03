@@ -1,19 +1,20 @@
 {% extends "base.html" %}
 
-{% block title %} Products {% endblock %}
+{% block title %} Microgreens {% endblock %}
 
 {% block content %}
-    <div style="text-align: center;">
-    <h2>Products:</h2>
-    <table border="1" cellpadding="10" cellspacing="0" style="margin: 0 auto;">
+<div class="product-table-container">
+    <h2>Microgreens</h2>
+    <br>
+    <table class="product-table">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Days of Growth</th>
-                <th>Seeds Amount</th>
-                <th>Cost Price</th>
-                <th>Sale Price</th>
-                <th>Actions</th>
+                <th>Název</th>
+                <th>Dní růstu</th>
+                <th>Množství semen</th>
+                <th>Cena semen</th>
+                <th>Prodejní cena</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -26,19 +27,21 @@
                 <td>{{ product.sale_price }}</td>
                 <td>
                     <form method="get" action="{% url 'edit-product' product.pk %}" style="display:inline;">
-                        <button type="submit">Edit</button>
+                        <button type="submit">Upravit</button>
                     </form>
                     <form method="get" action="{% url 'delete-product' product.pk %}" style="display:inline;">
-                        <button type="submit">Delete</button>
+                        <button type="submit">Smazat</button>
                     </form>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    <br>
     <form method="get" action="{% url 'add-product' %}">
-        <button type="submit">Add New Product</button>
+        <button type="submit" class="product-btn-add">Přidat nový druh</button>
     </form>
+</div>
 {% endblock %}
-    </div>
+
+
+

@@ -3,58 +3,60 @@
 {% block title %} Restaurants {% endblock %}
 
 {% block content %}
-    <div style="text-align: center;">
-    <h2>Restaurants:</h2>
-        <h4>Total sales: {{ total_together }}</h4>
-        <h4>Total quantity: {{ total_together_quantity }}</h4>
-    {{message}}
-    <br>
-    <table border="1" cellpadding="10" cellspacing="0" style="margin: 0 auto;">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>City</th>
-                <th>Distance</th>
-                <th>Region</th>
-                <th>Delivery_day</th>
-                <th>Driver</th>
-                <th>E-mail</th>
-                <th>CZK/week</th>
-                <th>Quantity/week</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for restaurant_data in restaurants_data %}
-            <tr>
-                <td><strong>{{ restaurant_data.restaurant.name }} </strong></td>
-                <td>{{ restaurant_data.restaurant.city }}</td>
-                <td>{{ restaurant_data.restaurant.distance}}</td>
-                <td>{{ restaurant_data.restaurant.region }}</td>
-                <td>{{ restaurant_data.restaurant.region.delivery_day}}</td>
-                <td>{{ restaurant_data.restaurant.region.driver}}</td>
-                <td>{{ restaurant_data.restaurant.email }}</td>
-                <td>{{ restaurant_data.total }}</td>
-                <td>{{ restaurant_data.total_quantity }}</td>
-                <td><form method="get" action="{% url 'edit-restaurant' restaurant_data.restaurant.pk %}" style="display: inline">
-                        <button type="submit">Edit</button>
-                    </form>
-                    <form method="get" action="{% url 'delete-restaurant' restaurant_data.restaurant.pk %}" style="display: inline">
-                        <button type="submit">Delete</button>
-                    </form>
-                    <form method="get" action="{% url 'order-detail' restaurant_data.restaurant.pk %}" style="display: inline">
-                        <button type="submit">Order detail</button>
-                    </form>
-                </td>
-
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <br>
-    <form method="get" action="{% url 'add-restaurant' %}">
-        <button type="submit">Add New Restaurant</button>
-    </form>
-
-{% endblock %}
+    <div class="restaurant-table-container" style="text-align: center;">
+        <h1>Restaurace</h1>
+        <h6>Total sales: {{ total_together }}</h6>
+        <h6>Total quantity: {{ total_together_quantity }}</h6>
+        {{ message }}
+        <br>
+        <table class="restaurant-table" border="1" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Název</th>
+                    <th>Město</th>
+                    <th style="width: 4%;">Km</th> <!-- Zúžený sloupec Distance -->
+                    <th>Region</th>
+                    <th style="width: 6%;">Doručení</th>
+                    <th style="width: 7%;">Řidič</th>
+                    <th>E-mail</th>
+                    <th style="width: 5%;">CZK</th>
+                    <th style="width: 5%;">Množství</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for restaurant_data in restaurants_data %}
+                <tr>
+                    <td><strong>{{ restaurant_data.restaurant.name }}</strong></td>
+                    <td>{{ restaurant_data.restaurant.city }}</td>
+                    <td>{{ restaurant_data.restaurant.distance }}</td>
+                    <td>{{ restaurant_data.restaurant.region }}</td>
+                    <td>{{ restaurant_data.restaurant.region.delivery_day }}</td>
+                    <td>{{ restaurant_data.restaurant.region.driver.user.last_name }}</td>
+                    <td>{{ restaurant_data.restaurant.email }}</td>
+                    <td>{{ restaurant_data.total }}</td>
+                    <td>{{ restaurant_data.total_quantity }}</td>
+                    <td>
+                        <form method="get" action="{% url 'edit-restaurant' restaurant_data.restaurant.pk %}" style="display: inline">
+                            <button type="submit">Upravit</button>
+                        </form>
+                        <form method="get" action="{% url 'delete-restaurant' restaurant_data.restaurant.pk %}" style="display: inline">
+                            <button type="submit">Smazat</button>
+                        </form>
+                        <form method="get" action="{% url 'order-detail' restaurant_data.restaurant.pk %}" style="display: inline">
+                            <button type="submit">Detail</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <form method="get" action="{% url 'add-restaurant' %}" style="display: inline;">
+            <button type="submit" class="restaurant-btn-add">Přidat Restauraci</button> <!-- Použití třídy pro styl -->
+        </form>
     </div>
+{% endblock %}
+
+
+

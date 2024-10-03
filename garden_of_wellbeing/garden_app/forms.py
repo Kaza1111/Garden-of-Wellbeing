@@ -13,3 +13,7 @@ class AddRestaurantForm(forms.ModelForm):
     class Meta:
         model = Restaurant
         fields = '__all__'
+
+#formu
+class reviewform(forms.Form):
+    number = forms.IntegerField()
