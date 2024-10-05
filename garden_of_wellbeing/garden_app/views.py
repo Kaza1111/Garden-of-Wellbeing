@@ -143,3 +143,8 @@ class DeleteRestaurantView(View):
         restaurant = get_object_or_404(Restaurant, pk=restaurant_pk)
         restaurant.delete()
         return redirect('restaurant-list')
+
+class HomeView(LoginRequiredMixin,View):
+    login_url = '/login/'
+    def get(self,request,*args, **kwargs):
+        return render(request, "garden_app/home.html")

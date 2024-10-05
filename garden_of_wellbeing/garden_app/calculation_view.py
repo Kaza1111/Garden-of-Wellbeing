@@ -7,6 +7,7 @@ from .models import Region, ProductCost, Product, DeliveryCost
 #Display the table with basic overview for every region (Sales, Delivery costs, Product costs, Margin,...)
 class CalculationView(View):
     def get(self, request, *args, **kwargs):
+
         delivery_costs = DeliveryCost.objects.all()
         for delivery_cost in delivery_costs:
             delivery_cost.calculate_delivery_cost()

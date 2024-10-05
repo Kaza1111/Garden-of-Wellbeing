@@ -35,9 +35,9 @@ class ProductCost(models.Model):
     lighting_hours = models.IntegerField(default=18, validators=[MinValueValidator(0), MaxValueValidator(24)])
     salary = models.PositiveIntegerField(default=250)
 
-    total_product_cost = models.FloatField()
+    total_product_cost = models.FloatField(default=0)
 
-    #function for calculating every direct costs for products - seed cost, labor cost, light cost and sum of these values - total product cost
+    # Function for calculating every direct costs for products - seed cost, labor cost, light cost and sum of these values - total product cost
     def calculate_product_cost(self):
         print(self.kw_price)
 
@@ -48,11 +48,21 @@ class ProductCost(models.Model):
         print(light_cost)
         print(f"Before:{self.total_product_cost}")
         self.total_product_cost = float(seed_cost + labor_cost + light_cost)
+        if self.total_product_cost is None:
+            self.total_product_cost = 0.0
+
         print(f"After:{self.total_product_cost}")
 
         self.save()
 
         return round(self.total_product_cost,1)
+
+@receiver(post_save, sender=Product)
+def create_product_cost(sender, instance, created, **kwargs):
+    if created:
+        new_product_cost = ProductCost.objects.create(product=instance)
+        new_product_cost.calculate_product_cost()
+
 
 REGION_CHOICES = (
     ('Šumava', 'Šumava'),

@@ -1,21 +1,21 @@
 {% extends "base.html" %}
 
-{% block title %} Calculation {% endblock %}
+{% block title %} Kalkulace {% endblock %}
 
 {% block content %}
-    <h2>Calculation</h2>
+    <h2 style="text-align: center">Kalkulace</h2>
     <div class="calculation-table-container">
         <div class="calculation-table">
             <table>
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Total sales</th>
-                        <th>Total delivery cost</th>
-                        <th>Products costs</th>
-                        <th>Fuel cost</th>
-                        <th>Salary cost</th>
-                        <th>Margin</th>
+                        <th>TRŽBY</th>
+                        <th>NÁKLADY</th>
+                        <th>MARŽE</th>
+                        <th>Produktové náklady</th>
+                        <th>Benzin/Nafta</th>
+                        <th>Práce</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,10 +24,10 @@
                         <td><strong>{{ delivery_cost.region }}</strong></td>
                         <td>{{ delivery_cost.total_sales }}</td>
                         <td>{{ delivery_cost.total_delivery_costs }}</td>
+                        <td>{{ delivery_cost.margin }}</td>
                         <td>{{ delivery_cost.total_products_costs }}</td>
                         <td>{{ delivery_cost.fuel_cost }}</td>
                         <td>{{ delivery_cost.salary_cost }}</td>
-                        <td>{{ delivery_cost.margin }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -37,18 +37,18 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Parameter</th>
-                        <th>Value</th>
-                        <th>Action</th>
+                        <th>Parametr</th>
+                        <th>Hodnota</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <form method="post" action="{% url 'calculation' %}">
                         {% csrf_token %}
                         <tr>
-                            <td>Fuel price</td>
+                            <td>Cena benzinu</td>
                             <td><input type="number" name="fuel_price"></td>
-                            <td><button type="submit">Submit</button></td>
+                            <td><button type="submit">Potvrdit</button></td>
                         </tr>
                         {% if errors.fuel_price %}
                         <tr>
@@ -56,9 +56,9 @@
                         </tr>
                         {% endif %}
                         <tr>
-                            <td>Salary</td>
+                            <td>Hodinová mzda</td>
                             <td><input type="number" name="salary"></td>
-                            <td><button type="submit">Submit</button></td>
+                            <td><button type="submit">Potvrdit</button></td>
                         </tr>
                         {% if errors.salary %}
                         <tr>
@@ -66,9 +66,9 @@
                         </tr>
                         {% endif %}
                         <tr>
-                            <td>KW Price</td>
+                            <td>Cena za KW</td>
                             <td><input type="number" name="kw_price"></td>
-                            <td><button type="submit">Submit</button></td>
+                            <td><button type="submit">Potvrdit</button></td>
                         </tr>
                         {% if errors.kw_price %}
                         <tr>
@@ -76,9 +76,9 @@
                         </tr>
                         {% endif %}
                         <tr>
-                            <td>Watts</td>
+                            <td>Počet wattů</td>
                             <td><input type="number" name="watts"></td>
-                            <td><button type="submit">Submit</button></td>
+                            <td><button type="submit">Potvrdit</button></td>
                         </tr>
                         {% if errors.watts %}
                         <tr>
@@ -86,9 +86,9 @@
                         </tr>
                         {% endif %}
                         <tr>
-                            <td>Lighting hours</td>
+                            <td>Počet hodin světla</td>
                             <td><input type="number" name="lighting_hours"></td>
-                            <td><button type="submit">Submit</button></td>
+                            <td><button type="submit">Potvrdit</button></td>
                         </tr>
                         {% if errors.lighting_hours %}
                         <tr>
