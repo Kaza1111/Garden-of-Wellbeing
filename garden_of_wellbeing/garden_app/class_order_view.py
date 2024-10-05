@@ -22,7 +22,7 @@ def calculate_order_item_subtotal(order_items_to_edit):
     return order_items_subtotal, total, total_quantity
 
 #Display a order detail for every restaurant (even if restaurant has no order), possibility to add items and note to order
-class OrderView(LoginRequiredMixin, View):
+class OrderView( View):
     login_url = '/login/'
     def get(self, request, restaurant_pk, *args,**kwargs):
         restaurant = get_object_or_404(Restaurant, pk = restaurant_pk)

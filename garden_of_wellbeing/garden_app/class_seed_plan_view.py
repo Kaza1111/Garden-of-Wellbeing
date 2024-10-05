@@ -8,7 +8,7 @@ from .class_order_view import calculate_order_item_subtotal
 
 # Display a table with the seed plan. The first column represents today, followed by the next 13 days.
 # Each cell contains the number of a specific product that needs to be seeded in order to be ready for the delivery day.
-class SeedPlanView(LoginRequiredMixin, View):
+class SeedPlanView( View):
     login_url = '/login/'
     def get(self, request, *args, **kwargs):
         products = Product.objects.all()

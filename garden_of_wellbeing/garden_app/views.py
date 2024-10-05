@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 
@@ -13,11 +13,11 @@ from .models import Product, Restaurant, Order, OrderItem
 # Dedil bych z této třídy, místo LoginRequired
 
 
-class LoggedInView(LoginRequiredMixin, View):
+class LoggedInView( View):
     login_url = '/login/'
 
 
-class ProductsListView(LoginRequiredMixin, View):
+class ProductsListView( View):
     login_url = '/login/'
 
     def get(self, request, *args, **kwargs):
@@ -26,7 +26,7 @@ class ProductsListView(LoginRequiredMixin, View):
 
 
 # Possibility to add a new product, display a form
-class AddProductView(LoginRequiredMixin,View):
+class AddProductView(View):
     login_url = '/login/'
     def get(self, request, *args, **kwargs):
         form = AddProductForm()
@@ -69,7 +69,7 @@ class DeleteProductView(PermissionRequiredMixin,View):
 
 
 # Display a list of restaurants with total sales and quantites, if not any restaurant, display message
-class RestaurantListView(LoginRequiredMixin, View):
+class RestaurantListView( View):
     login_url = '/login/'
 
     def get(self, request, *args, **kwargs):
@@ -109,7 +109,7 @@ class RestaurantListView(LoginRequiredMixin, View):
 
 
 # Posibility to add a new restaurant, display a form
-class AddRestaurantView(LoginRequiredMixin,View):
+class AddRestaurantView(View):
     login_url = '/login/'
     def get(self, request, *args, **kwargs):
         form = AddRestaurantForm()
@@ -124,7 +124,7 @@ class AddRestaurantView(LoginRequiredMixin,View):
 
 
 # Posibility to edit existing restaurant, display a form
-class EditRestaurantView(LoginRequiredMixin,View):
+class EditRestaurantView(View):
     login_url = '/login/'
     def get(self, request, restaurant_pk, *args, **kwargs):
         restaurant = get_object_or_404(Restaurant, pk=restaurant_pk)
@@ -141,14 +141,14 @@ class EditRestaurantView(LoginRequiredMixin,View):
 
 
 # Posibility to delete existing restaurant
-class DeleteRestaurantView(LoginRequiredMixin,View):
+class DeleteRestaurantView(View):
     login_url = '/login/'
     def get(self, request, restaurant_pk, *args, **kwargs):
         restaurant = get_object_or_404(Restaurant, pk=restaurant_pk)
         restaurant.delete()
         return redirect('restaurant-list')
 
-class HomeView(LoginRequiredMixin,View):
+class HomeView(View):
     login_url = '/login/'
     def get(self,request,*args, **kwargs):
         return render(request, "garden_app/home.html")
