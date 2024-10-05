@@ -26,7 +26,8 @@ class ProductsListView(LoginRequiredMixin, View):
 
 
 # Possibility to add a new product, display a form
-class AddProductView(View):
+class AddProductView(LoginRequiredMixin,View):
+    login_url = '/login/'
     def get(self, request, *args, **kwargs):
         form = AddProductForm()
         return render(request, "garden_app/add_product.html", {'form': form})
@@ -58,7 +59,7 @@ class EditProductView(PermissionRequiredMixin, View):
 
 
 # Posibility to delete existing product if you click the button
-class DeleteProductView(View):
+class DeleteProductView(PermissionRequiredMixin,View):
     permission_required = 'garden_app.delete_product'
 
     def get(self, request, product_pk, *args, **kwargs):
@@ -108,7 +109,8 @@ class RestaurantListView(LoginRequiredMixin, View):
 
 
 # Posibility to add a new restaurant, display a form
-class AddRestaurantView(View):
+class AddRestaurantView(LoginRequiredMixin,View):
+    login_url = '/login/'
     def get(self, request, *args, **kwargs):
         form = AddRestaurantForm()
         return render(request, "garden_app/add_restaurant.html", {'form': form})
@@ -122,7 +124,8 @@ class AddRestaurantView(View):
 
 
 # Posibility to edit existing restaurant, display a form
-class EditRestaurantView(View):
+class EditRestaurantView(LoginRequiredMixin,View):
+    login_url = '/login/'
     def get(self, request, restaurant_pk, *args, **kwargs):
         restaurant = get_object_or_404(Restaurant, pk=restaurant_pk)
         form = AddRestaurantForm(instance=restaurant)
@@ -138,7 +141,8 @@ class EditRestaurantView(View):
 
 
 # Posibility to delete existing restaurant
-class DeleteRestaurantView(View):
+class DeleteRestaurantView(LoginRequiredMixin,View):
+    login_url = '/login/'
     def get(self, request, restaurant_pk, *args, **kwargs):
         restaurant = get_object_or_404(Restaurant, pk=restaurant_pk)
         restaurant.delete()
