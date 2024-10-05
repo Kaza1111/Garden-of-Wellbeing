@@ -1,7 +1,40 @@
 {% extends "base.html" %}
 
-{% block title %} Home {% endblock %}
+{% block title %} Domů {% endblock %}
 
 {% block content %}
-    Home, sweet home
+    {% load static %}
+    <div class="icon-container">
+        <div class="icon-row">
+            <a href="{% url 'products' %}" title="Microgreens">
+                <img src="{% static 'garden_app/microgreens.png' %}" alt="microgreens" class="icon">
+            </a>
+            <a href="{% url 'restaurant-list' %}" title="Restaurace">
+                <img src="{% static 'garden_app/restaurants.png' %}" alt="restaurants" class="icon">
+            </a>
+        </div>
+        <div class="icon-row">
+            <a href="{% url 'seed-plan' %}" title="Plán výsevu">
+                <img src="{% static 'garden_app/plan.png' %}" alt="plan" class="icon">
+            </a>
+            <a href="{% url 'calculation' %}" title="Kalkulace">
+                <img src="{% static 'garden_app/cal.png' %}" alt="calculation" class="icon">
+            </a>
+        </div>
+    </div>
+    <script>
+        document.querySelectorAll('.icon').forEach(icon => {
+            icon.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.2)';
+                this.style.boxShadow = '0 4px 15px rgba(0, 128, 0, 0.6)';
+            });
+            icon.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+                this.style.boxShadow = 'none';
+            });
+        });
+    </script>
 {% endblock %}
+
+
+

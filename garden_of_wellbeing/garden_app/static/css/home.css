@@ -1,0 +1,32 @@
+.icon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.icon-row {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+}
+
+.icon {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 0 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    object-fit: cover;
+    background-color: rgba(0, 128, 0, 0.3); /* Změna pozadí pro test */
+    border: 2px solid rgba(0, 128, 0, 0.6); /* Přidání rámečku pro test */
+}
+
+.icon:hover {
+    transform: scale(1.2);
+    box-shadow: 0 4px 15px rgba(0, 128, 0, 0.6);
+}
+
+
+

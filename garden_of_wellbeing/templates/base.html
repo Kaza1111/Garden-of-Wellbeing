@@ -12,12 +12,13 @@
     <link rel="stylesheet" href="{% static 'css/order-detail.css' %}">
     <link rel="stylesheet" href="{% static 'css/calculation.css' %}">
     <link rel="stylesheet" href="{% static 'css/seed-plan.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
 
 </head>
 <body>
 <!-- Navigační panel s logem -->
 <nav class="navbar navbar-expand-lg">
-    <a class="navbar-brand d-flex align-items-center" href="#">
+    <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
         <img src="{% static 'garden_app/logo-zb.jpeg' %}" alt="Logo Zahrádka Blahobytu" class="logo">
         <span class="navbar-text ms-2">Zahrádka Blahobytu</span>
     </a>
@@ -35,11 +36,12 @@
                 <a class="nav-link {% if request.path == '/calculation/' %}active{% endif %}" href="{% url 'calculation' %}">Kalkulace</a>
             </li>
        </ul>
-
-    <form action="{% url 'logout' %}" method="post" class="d-inline">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-logout ms-3">Odhlásit se</button>
-    </form>
+    {% if user.is_authenticated %}
+        <form action="{% url 'logout' %}" method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-logout ms-3">Odhlásit se</button>
+        </form>
+    {% endif %}
 </nav>
 
 <!-- Obsah stránky s možností vložení vlastního obsahu -->
