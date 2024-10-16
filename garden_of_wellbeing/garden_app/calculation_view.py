@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Region, ProductCost, Product, DeliveryCost
 
 
 #Display the table with basic overview for every region (Sales, Delivery costs, Product costs, Margin,...)
-class CalculationView(View):
+class CalculationView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
 
         delivery_costs = DeliveryCost.objects.all()
